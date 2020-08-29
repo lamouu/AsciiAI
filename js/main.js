@@ -5,7 +5,7 @@ $(function() {
 });
 
 function InitFilesRanksBrd() {
-	
+
 	var index = 0;
 	var file = FILES.FILE_A;
 	var rank = RANKS.RANK_1;
