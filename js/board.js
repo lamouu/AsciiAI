@@ -83,17 +83,9 @@ function GeneratePosKey() {
 
 }
 
-function ResetBoard() {
+function UpdateListsMaterial() {	
 	
-	var index = 0;
-	
-	for(index = 0; index < BRD_SQ_NUM; ++index) {
-		GameBoard.pieces[index] = SQUARES.OFFBOARD;
-	}
-	
-	for(index = 0; index < 64; ++index) {
-		GameBoard.pieces[SQ120(index)] = PIECES.EMPTY;
-	}
+	var piece,sq,index,colour;
 	
 	for(index = 0; index < 14 * 120; ++index) {
 		GameBoard.pList[index] = PIECES.EMPTY;
@@ -107,6 +99,33 @@ function ResetBoard() {
 		GameBoard.pceNum[index] = 0;
 	}
 	
+	for(index = 0; index < 64; ++index) {
+		sq = SQ120(index);
+		piece = GameBoard.pieces[sq];
+		if(piece != PIECES.EMPTY) {
+			console.log('piece ' + piece + ' on ' + sq);
+			colour = PieceCol[piece];		
+			
+			GameBoard.material[colour] += PieceVal[piece];
+			
+			GameBoard.pList[PCEINDEX(piece,GameBoard.pceNum[piece])] = sq;
+			GameBoard.pceNum[piece]++;			
+		}
+	}
+}
+
+function ResetBoard() {
+	
+	var index = 0;
+	
+	for(index = 0; index < BRD_SQ_NUM; ++index) {
+		GameBoard.pieces[index] = SQUARES.OFFBOARD;
+	}
+	
+	for(index = 0; index < 64; ++index) {
+		GameBoard.pieces[SQ120(index)] = PIECES.EMPTY;
+	}
+
 	GameBoard.side = COLOURS.BOTH;
 	GameBoard.enPas = SQUARES.NO_SQ;
 	GameBoard.fiftyMove = 0;	
@@ -207,8 +226,7 @@ function ParseFen(fen) {
     }
 	
 	GameBoard.posKey = GeneratePosKey();
-	
-	
+	UpdateListsMaterial();
 }
 
 
