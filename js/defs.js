@@ -28,7 +28,7 @@ var MAXDEPTH = 64;
 var FilesBrd = new Array(BRD_SQ_NUM);
 var RanksBrd = new Array(BRD_SQ_NUM);
 
-var START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+var START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1";
 
 var PceChar = ".PNBRQKpnbrqk";
 var SideChar = "wb-";
@@ -57,6 +57,13 @@ var KnDir = [ -8, -19,	-21, -12, 8, 19, 21, 12 ];
 var RkDir = [ -1, -10,	1, 10 ];
 var BiDir = [ -9, -11, 11, 9 ];
 var KiDir = [ -1, -10,	1, 10, -9, -11, 11, 9 ];
+
+var DirNum = [ 0, 0, 8, 4, 4, 8, 8, 0, 8, 4, 4, 8, 8 ];
+var PceDir = [ 0, 0, KnDir, BiDir, RkDir, KiDir, KiDir, 0, KnDir, BiDir, RkDir, KiDir, KiDir ];
+var LoopNonSlidePce = [ PIECES.wN, PIECES.wK, 0, PIECES.bN, PIECES.bK, 0 ];
+var LoopNonSlideIndex = [ 0, 3 ];
+var LoopSlidePce = [ PIECES.wB, PIECES.wR, PIECES.wQ, 0, PIECES.bB, PIECES.bR, PIECES.bQ, 0 ];
+var LoopSlideIndex = [ 0, 4 ];
 
 var PieceKeys = new Array(14 * 120);
 var SideKey;
@@ -108,3 +115,8 @@ var MFLAGCAP = 0x7C000;
 var MFLAGPROM = 0xF00000;
 
 var NOMOVE = 0;
+
+function SQOFFBOARD(sq) {
+	if(FilesBrd[sq]==SQUARES.OFFBOARD) return BOOL.TRUE;
+	return BOOL.FALSE;	
+}
