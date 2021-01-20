@@ -7,3 +7,8 @@
                     .8'     `888.  o.  )88b 888   .o8  888   888   .8'     `888.   888
                    o88o     o8888o 8""888P' `Y8bod8P' o888o o888o o88o     o8888o o888o
 ```
+
+Future improvements
+------
+* Opening book
+* Endgame book
