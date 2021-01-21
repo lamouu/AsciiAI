@@ -69,11 +69,33 @@ function InitSq120To64() {
 
 }
 
+function InitBoardVars() {
+
+	var index = 0;
+	for(index = 0; index < MAXGAMEMOVES; ++index) {
+		GameBoard.history.push( {
+			move : NOMOVE,
+			castlePerm : 0,
+			enPas : 0,
+			fiftyMove : 0,
+			posKey : 0
+		});
+	}	
+	
+	for(index = 0; index < PVENTRIES; ++index) {
+		GameBoard.PvTable.push({
+			move : NOMOVE,
+			posKey : 0
+		});
+	}
+}
+
 function init() {
 	console.log("init() called");
 	InitFilesRanksBrd();
 	InitHashKeys();
 	InitSq120To64();
+	InitBoardVars();
 }
 
 
