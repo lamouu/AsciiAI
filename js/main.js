@@ -4,10 +4,11 @@ $(function() {
 	ParseFen(START_FEN);
 	PrintBoard();
 	GenerateMoves();
-	PrintMoveList();
-	PrintPieceLists();
 	CheckBoard();
 	MakeMove(GameBoard.moveList[0]);
+	PrintBoard();
+	CheckBoard();
+	TakeMove();
 	PrintBoard();
 	CheckBoard();
 });
