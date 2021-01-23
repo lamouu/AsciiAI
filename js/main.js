@@ -5,6 +5,11 @@ $(function() {
 	PrintBoard();
 	GenerateMoves();
 	PrintMoveList();
+	PrintPieceLists();
+	CheckBoard();
+	MakeMove(GameBoard.moveList[0]);
+	PrintBoard();
+	CheckBoard();
 });
 
 function InitFilesRanksBrd() {
@@ -81,13 +86,6 @@ function InitBoardVars() {
 			posKey : 0
 		});
 	}	
-	
-	for(index = 0; index < PVENTRIES; ++index) {
-		GameBoard.PvTable.push({
-			move : NOMOVE,
-			posKey : 0
-		});
-	}
 }
 
 function init() {

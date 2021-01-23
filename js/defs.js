@@ -28,7 +28,7 @@ var MAXDEPTH = 64;
 var FilesBrd = new Array(BRD_SQ_NUM);
 var RanksBrd = new Array(BRD_SQ_NUM);
 
-var START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1";
+var START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
 var PceChar = ".PNBRQKpnbrqk";
 var SideChar = "wb-";
