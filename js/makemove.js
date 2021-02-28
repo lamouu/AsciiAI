@@ -43,7 +43,7 @@ function MovePiece(from, to) {
 	HASH_PCE(pce, from);
 	GameBoard.pieces[from] = PIECES.EMPTY;
 	
-	HASH_PCE(pce, to);
+	HASH_PCE(pce,to);
 	GameBoard.pieces[to] = pce;
 	
 	for(index = 0; index < GameBoard.pceNum[pce]; ++index) {
@@ -136,7 +136,7 @@ function MakeMove(move) {
     HASH_SIDE();
     
     if(SqAttacked(GameBoard.pList[PCEINDEX(Kings[side],0)], GameBoard.side))  {
-        TakeMove();
+         TakeMove();
     	return BOOL.FALSE;
     }
     
@@ -194,3 +194,90 @@ function TakeMove() {
     }
     
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
