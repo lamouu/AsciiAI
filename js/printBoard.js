@@ -1,9 +1,3 @@
-// 1.make board clickable
-// 2.link clicks to piece move
-// 3.make pieces bold on selection
-// 4.limit move options
-// 5.lower brightness on non-selectable
-
 var boardArray = [
   ['R','N','B','Q','K','B','N','R'],
   ['P','P','P','P','P','P','P','P'],
@@ -24,7 +18,7 @@ function placePieces () {
   for (x = 0; x < 8; x++) {
     for (y = 0; y < 8; y++) {
       boardId = String.fromCharCode(97 + x) + String(8 - y);
-      if ((y + 7 * x) % 2 == 0) {
+      if ((y + 7 * x) % 2 != 0) {
         boardTile = '                 <br>                 <br>                 <br>                 <br>                 <br>                 <br>                 <br>';
       } else {
         boardTile = ':::::::::::::::::<br>:::::::::::::::::<br>:::::::::::::::::<br>:::::::::::::::::<br>:::::::::::::::::<br>:::::::::::::::::<br>:::::::::::::::::<br>';
@@ -111,27 +105,16 @@ function placePieces () {
   }
 }
 
-var clicked = 0;
-var a8 = document.getElementById("a8");
-a8.onclick = function(){
-  console.log("a8");
-  if (clicked == 0) {
-    document.getElementById("a8").style.fontWeight = "bold";
-    clicked = 1;
-  } else {
-    document.getElementById("a8").style.fontWeight = "normal";
-    clicked = 0;
-  }
-}
-var b8 = document.getElementById("b8");
-b8.onclick = function(){
-  console.log("b8");
-  if (clicked == 0) {
-    document.getElementById("b8").style.fontWeight = "bold";
-    clicked = 1;
-  } else {
-    document.getElementById("b8").style.fontWeight = "normal";
-    clicked = 0;
+{
+  var file = 'abcdefgh';
+  for (var x = 0; x < 8; x++) {
+    for (var y = 1; y < 9; y++) {
+      let pos = file.charAt(x) + y;
+
+      document.getElementById(pos).addEventListener('click', function() {
+        console.log(pos);
+      }, false);
+    }
   }
 }
 
