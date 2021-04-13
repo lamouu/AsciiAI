@@ -10,5 +10,8 @@
 
 Future improvements
 ------
-* Opening book
-* Endgame book
+* Clean and comment
+* Visible move options
+* Option to play on regular board
+* Browser/scaling compatibility
+* Opening & endgame book
