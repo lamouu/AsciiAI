@@ -10,7 +10,7 @@ function Perft(depth) {
     GenerateMoves();
     
 	var index;
-	var move;
+	var move; 
 	
 	for(index = GameBoard.moveListStart[GameBoard.ply]; index < GameBoard.moveListStart[GameBoard.ply + 1]; ++index) {
 	
@@ -28,6 +28,7 @@ function Perft(depth) {
 function PerftTest(depth) {    
 
 	PrintBoard();
+	placePieces();
 	console.log("Starting Test To Depth:" + depth);	
 	perft_leafNodes = 0;
 

@@ -52,7 +52,6 @@ function MovePiece(from, to) {
 			break;
 		}
 	}
-	
 }
 
 function MakeMove(move) {

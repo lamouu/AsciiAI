@@ -18,6 +18,7 @@ $('#NewGameButton').click( function () {
 function NewGame(fenStr) {
 	ParseFen(fenStr);
 	PrintBoard();
+	placePieces();
 	SetInitialBoardPieces();
 	CheckAndSet();
 }
@@ -81,10 +82,11 @@ function ClickedSquare(pageX, pageY) {
 	
 	console.log('Clicked sq:' + PrSq(sq));
 	
-	SetSqSelected(sq);	
+	SetSqSelected(sq);
 	
 	return sq;
 }
+
 
 $(document).on('click','.Piece', function (e) {
 	console.log('Piece Click');
@@ -94,8 +96,8 @@ $(document).on('click','.Piece', function (e) {
 	} else {
 		UserMove.to = ClickedSquare(e.pageX, e.pageY);
 	}
-	
 	MakeUserMove();
+
 	
 });
 
@@ -108,6 +110,7 @@ $(document).on('click','.Square', function (e) {
 
 });
 
+
 function MakeUserMove() {
 
 	if(UserMove.from != SQUARES.NO_SQ && UserMove.to != SQUARES.NO_SQ) {
@@ -118,10 +121,11 @@ function MakeUserMove() {
 		
 		if(parsed != NOMOVE) {
 			MakeMove(parsed);
-			PrintBoard();
 			MoveGUIPiece(parsed);
 			CheckAndSet();
 			PreSearch();
+			PrintBoard();
+			placePieces();
 		}
 	
 		DeSelectSq(UserMove.from);
@@ -129,6 +133,7 @@ function MakeUserMove() {
 		
 		UserMove.from = SQUARES.NO_SQ;
 		UserMove.to = SQUARES.NO_SQ;
+
 	}
 
 }
@@ -308,7 +313,7 @@ function StartSearch() {
 
 	SearchController.depth = MAXDEPTH;
 	var t = $.now();
-	var tt = $('#ThinkTimeChoice').val();
+	var tt = 2;
 	
 	SearchController.time = parseInt(tt) * 1000;
 	SearchPosition();
@@ -316,6 +321,9 @@ function StartSearch() {
 	MakeMove(SearchController.best);
 	MoveGUIPiece(SearchController.best);
 	CheckAndSet();
+	
+	PrintBoard();
+    placePieces();
 }
 
 

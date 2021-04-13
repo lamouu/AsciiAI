@@ -1,100 +1,102 @@
 var boardArray = [
-  ['R','N','B','Q','K','B','N','R'],
-  ['P','P','P','P','P','P','P','P'],
-  ['','','','','','','',''],
-  ['','','','','','','',''],
-  ['','','','','','','',''],
-  ['','','','','','','',''],
-  ['p','p','p','p','p','p','p','p'],
-  ['r','n','b','q','k','b','n','r']];
+  [10,8,9,11,12,9,8,10],
+  [7,7,7,7,7,7,7,7],
+  [0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,0],
+  [1,1,1,1,1,1,1,1],
+  [4,2,3,5,6,3,2,4]];
+
 
 var fileNo = {"a":1,"b":2,"c":3,"d":4,"e":5,"f":6,"g":7,"h":8};
 
-  String.prototype.replaceAt = function(index, replacement) {
-    return this.substr(0, index) + replacement + this.substr(index + replacement.length);
+String.prototype.replaceAt = function(index, replacement) {
+  return this.substr(0, index) + replacement + this.substr(index + replacement.length);
 }
 
 function placePieces() {
   var boardId;
   var boardTile;
+
   for (x = 0; x < 8; x++) {
     for (y = 0; y < 8; y++) {
-      boardId = String.fromCharCode(97 + x) + String(8 - y);
+      boardId = String.fromCharCode(97 + x) + String(y + 1);
       if ((y + 7 * x) % 2 != 0) {
-        boardTile = '                 <br>                 <br>                 <br>                 <br>                 <br>                 <br>                 <br>';
-      } else {
         boardTile = ':::::::::::::::::<br>:::::::::::::::::<br>:::::::::::::::::<br>:::::::::::::::::<br>:::::::::::::::::<br>:::::::::::::::::<br>:::::::::::::::::<br>';
+      } else {
+        boardTile = '                 <br>                 <br>                 <br>                 <br>                 <br>                 <br>                 <br>';
       }
-      if (boardArray[y][x] == 'P') {
+      if (boardArray[y][x] == 7) {
         boardTile = boardTile.replaceAt(29,    '_');
         boardTile = boardTile.replaceAt(49,   '( )');
         boardTile = boardTile.replaceAt(69,  '/   \\');
         boardTile = boardTile.replaceAt(90,  ')   (');
         boardTile = boardTile.replaceAt(110,'{_____}');
-      } else if (boardArray[y][x] == 'p') {
+      } else if (boardArray[y][x] == 1) {
         boardTile = boardTile.replaceAt(29,    '_');
         boardTile = boardTile.replaceAt(49,   '(#)');
         boardTile = boardTile.replaceAt(69,  '/#%#\\');
         boardTile = boardTile.replaceAt(90,  ')%#%(');
         boardTile = boardTile.replaceAt(110,'{_#_#_}');
-      } else if (boardArray[y][x] == 'R') {
+      } else if (boardArray[y][x] == 10) {
         boardTile = boardTile.replaceAt(26, '|\'\-\'\-\'\|');
         boardTile = boardTile.replaceAt(48,  '|   |');
         boardTile = boardTile.replaceAt(69,  '|   |');
         boardTile = boardTile.replaceAt(90,  '/___\\');
         boardTile = boardTile.replaceAt(110,'{_____}');
-      } else if (boardArray[y][x] == 'r') {
+      } else if (boardArray[y][x] == 4) {
         boardTile = boardTile.replaceAt(26, '|\'\-\'\-\'\|');
         boardTile = boardTile.replaceAt(48,  '|#%#|');
         boardTile = boardTile.replaceAt(69,  '|%#%|');
         boardTile = boardTile.replaceAt(90,  '/#_#\\');
         boardTile = boardTile.replaceAt(110,'{#_#_#}');
-      } else if (boardArray[y][x] == 'N') {
+      } else if (boardArray[y][x] == 8) {
         boardTile = boardTile.replaceAt(27,  '_^^');
         boardTile = boardTile.replaceAt(46,'/_ • |>');
         boardTile = boardTile.replaceAt(70,   '/ |>');
         boardTile = boardTile.replaceAt(90,  '/   \\');
         boardTile = boardTile.replaceAt(110,'{_____}');
-      } else if (boardArray[y][x] == 'n') {
+      } else if (boardArray[y][x] == 2) {
         boardTile = boardTile.replaceAt(27,  '_^^');
         boardTile = boardTile.replaceAt(46,'/_ •%|>');
         boardTile = boardTile.replaceAt(70,   '/#|>');
         boardTile = boardTile.replaceAt(90,  '/#%#\\');
         boardTile = boardTile.replaceAt(110,'{#_#_#}');
-      } else if (boardArray[y][x] == 'B') {
+      } else if (boardArray[y][x] == 9) {
         boardTile = boardTile.replaceAt(28,   '_^_');
         boardTile = boardTile.replaceAt(49,  '\\ /');
         boardTile = boardTile.replaceAt(70,   '} {');
         boardTile = boardTile.replaceAt(90,  '/   \\');
         boardTile = boardTile.replaceAt(110,'{_____}');
-      } else if (boardArray[y][x] == 'b') {
+      } else if (boardArray[y][x] == 3) {
         boardTile = boardTile.replaceAt(28,   '_^_');
         boardTile = boardTile.replaceAt(49,  '\\%/');
         boardTile = boardTile.replaceAt(70,   '}#{');
         boardTile = boardTile.replaceAt(90,  '/#%#\\');
         boardTile = boardTile.replaceAt(110,'{#_#_#}');
-      } else if (boardArray[y][x] == 'Q') {
+      } else if (boardArray[y][x] == 11) {
         boardTile = boardTile.replaceAt(7,    '_◦_');
         boardTile = boardTile.replaceAt(28,   '/ \\');
         boardTile = boardTile.replaceAt(49,   '} {');
         boardTile = boardTile.replaceAt(69, '\/   \\');
         boardTile = boardTile.replaceAt(90,  ')   (');
         boardTile = boardTile.replaceAt(110,'{_____}');
-      } else if (boardArray[y][x] == 'q') {
+      } else if (boardArray[y][x] == 5) {
         boardTile = boardTile.replaceAt(7,    '_◦_');
         boardTile = boardTile.replaceAt(28,   '/%\\');
         boardTile = boardTile.replaceAt(49,   '}#{');
         boardTile = boardTile.replaceAt(69, '\/#%#\\');
         boardTile = boardTile.replaceAt(90,  ')%#%(');
         boardTile = boardTile.replaceAt(110,'{_#_#_}');
-      } else if (boardArray[y][x] == 'K') {
+      } else if (boardArray[y][x] == 12) {
         boardTile = boardTile.replaceAt(7,    '_+_');
         boardTile = boardTile.replaceAt(27,  '/   \\');
         boardTile = boardTile.replaceAt(48,  '}   {');
         boardTile = boardTile.replaceAt(69, '\/   \\');
         boardTile = boardTile.replaceAt(89, '(     )');
         boardTile = boardTile.replaceAt(110,'{_____}');
-      } else if (boardArray[y][x] == 'k') {
+      } else if (boardArray[y][x] == 6) {
         boardTile = boardTile.replaceAt(7,    '_+_');
         boardTile = boardTile.replaceAt(27,  '/#%#\\');
         boardTile = boardTile.replaceAt(48,  '}%#%{');
@@ -107,27 +109,36 @@ function placePieces() {
   }
 }
 
-var selected = '';                                       
-{
-  var file = 'abcdefgh';
-  for (var x = 0; x < 8; x++) {
-    for (var y = 1; y < 9; y++) {
-      let pos = file.charAt(x) + y;
+var tmpfile = 'abcdefgh';
+for (let x = 0; x < 8; x++) {
+  for (let y = 0; y < 8; y++) {
+    var rank = y + 1;
+    let pos = tmpfile.charAt(x) + rank;
 
-      document.getElementById(pos).addEventListener('click', function() {
-        if (selected == ''){
-          selected = pos;
-        } else if (selected == pos){
-          selected = '';
-        } else if (boardArray[8-selected[1]][fileNo[selected[0]]-1] != '') {
-          boardArray[8-pos[1]][fileNo[pos[0]]-1] = boardArray[8-selected[1]][fileNo[selected[0]]-1];
-          boardArray[8-selected[1]][fileNo[selected[0]]-1] = '';
-          selected = '';
-          printState();
+    document.getElementById(pos).addEventListener('click', function(e) {
+
+      if (GameBoard.pieces[SQ120(x + (8 * y))] != 0) {
+        console.log('Piece Click');
+
+        if(UserMove.from == SQUARES.NO_SQ) {
+          UserMove.from = SQ120(x + (8 * y));
+          SetSqSelected(SQ120(x + (8 * y)));
+        } else {
+          UserMove.to = SQ120(x + (8 * y));
+          SetSqSelected(SQ120(x + (8 * y)));
         }
-        console.log("selected: " + selected);
-      }, false);
-    }
+        
+        MakeUserMove();
+
+      } else {
+        console.log('Square Click');	
+        if(UserMove.from != SQUARES.NO_SQ) {
+          UserMove.to = SQ120(x + (8 * y));
+          SetSqSelected(SQ120(x + (8 * y)));
+          MakeUserMove();
+        }
+      }
+    });
   }
 }
 

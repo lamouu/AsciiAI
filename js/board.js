@@ -85,6 +85,7 @@ function PrintBoard() {
 		for(file = FILES.FILE_A; file <= FILES.FILE_H; file++) {
 			sq = FR2SQ(file,rank);
 			piece = GameBoard.pieces[sq];
+			boardArray[rank][file] = piece;
 			line += (" " + PceChar[piece] + " ");
 		}
 		console.log(line);
