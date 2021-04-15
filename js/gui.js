@@ -1,25 +1,19 @@
-$("#SetFen").click(function () {
-	var fenStr = $("#fenIn").val();	
-	NewGame(fenStr);
-});
-
 $('#TakeButton').click( function () {
-	if(GameBoard.hisPly > 0) {
+	if(board.hisPly > 0) {
 		TakeMove();
-		GameBoard.ply = 0;
+		board.ply = 0;
 		SetInitialBoardPieces();
 	}
 });
 
 $('#NewGameButton').click( function () {
-	NewGame(START_FEN);
+	NewGame(StartFEN);
 });
 
 function NewGame(fenStr) {
 	ParseFen(fenStr);
-	PrintBoard();
-	placePieces();
-	SetInitialBoardPieces();
+	if (DEBUG) PrintBoard();
+	UpdateGui();
 	CheckAndSet();
 }
 
@@ -27,31 +21,9 @@ function ClearAllPieces() {
 	$(".Piece").remove();
 }
 
-function SetInitialBoardPieces() {
-
-	var sq;
-	var sq120;
-	var file,rank;
-	var rankName;
-	var fileName;
-	var imageString;
-	var pieceFileName;
-	var pce;
-	
-	ClearAllPieces();
-	
-	for(sq = 0; sq < 64; ++sq) {
-		sq120 = SQ120(sq);
-		pce = GameBoard.pieces[sq120];
-		if(pce >= PIECES.wP && pce <= PIECES.bK) {
-			AddGUIPiece(sq120, pce);
-		}
-	}
-}
-
 function DeSelectSq(sq) {
 	$('.Square').each( function(index) {
-		if(PieceIsOnSq(sq, $(this).position().top, $(this).position().left) == BOOL.TRUE) {
+		if(PieceIsOnSq(sq, $(this).position().top, $(this).position().left) == 1) {
 				$(this).removeClass('SqSelected');
 		}
 	} );
@@ -59,80 +31,33 @@ function DeSelectSq(sq) {
 
 function SetSqSelected(sq) {
 	$('.Square').each( function(index) {
-		if(PieceIsOnSq(sq, $(this).position().top, $(this).position().left) == BOOL.TRUE) {
+		if(PieceIsOnSq(sq, $(this).position().top, $(this).position().left) == 1) {
 				$(this).addClass('SqSelected');
 		}
 	} );
 }
 
-function ClickedSquare(pageX, pageY) {
-	console.log('ClickedSquare() at ' + pageX + ',' + pageY);
-	var position = $('#Board').position();
-	
-	var workedX = Math.floor(position.left);
-	var workedY = Math.floor(position.top);
-	
-	pageX = Math.floor(pageX);
-	pageY = Math.floor(pageY);
-	
-	var file = Math.floor((pageX-workedX) / 60);
-	var rank = 7 - Math.floor((pageY-workedY) / 60);
-	
-	var sq = FR2SQ(file,rank);
-	
-	console.log('Clicked sq:' + PrSq(sq));
-	
-	SetSqSelected(sq);
-	
-	return sq;
-}
-
-
-$(document).on('click','.Piece', function (e) {
-	console.log('Piece Click');
-	
-	if(UserMove.from == SQUARES.NO_SQ) {
-		UserMove.from = ClickedSquare(e.pageX, e.pageY);
-	} else {
-		UserMove.to = ClickedSquare(e.pageX, e.pageY);
-	}
-	MakeUserMove();
-
-	
-});
-
-$(document).on('click','.Square', function (e) {
-	console.log('Square Click');	
-	if(UserMove.from != SQUARES.NO_SQ) {
-		UserMove.to = ClickedSquare(e.pageX, e.pageY);
-		MakeUserMove();
-	}
-
-});
-
-
 function MakeUserMove() {
 
-	if(UserMove.from != SQUARES.NO_SQ && UserMove.to != SQUARES.NO_SQ) {
+	if(UserMove.from != Squares.NO_SQ && UserMove.to != Squares.NO_SQ) {
 	
-		console.log("User Move:" + PrSq(UserMove.from) + PrSq(UserMove.to));	
+		if (DEBUG) console.log("User Move:" + PrSq(UserMove.from) + PrSq(UserMove.to));	
 		
 		var parsed = ParseMove(UserMove.from,UserMove.to);
 		
 		if(parsed != NOMOVE) {
 			MakeMove(parsed);
-			MoveGUIPiece(parsed);
 			CheckAndSet();
 			PreSearch();
-			PrintBoard();
-			placePieces();
+			if (DEBUG) PrintBoard();
+			UpdateGui();
 		}
 	
 		DeSelectSq(UserMove.from);
 		DeSelectSq(UserMove.to);
 		
-		UserMove.from = SQUARES.NO_SQ;
-		UserMove.to = SQUARES.NO_SQ;
+		UserMove.from = Squares.NO_SQ;
+		UserMove.to = Squares.NO_SQ;
 
 	}
 
@@ -142,96 +67,32 @@ function PieceIsOnSq(sq, top, left) {
 
 	if( (RanksBrd[sq] == 7 - Math.round(top/60) ) && 
 		FilesBrd[sq] == Math.round(left/60) ) {
-		return BOOL.TRUE;
+		return 1;
 	}
 		
-	return BOOL.FALSE;
+	return 0;
 
-}
-
-function RemoveGUIPiece(sq) {
-
-	$('.Piece').each( function(index) {
-		if(PieceIsOnSq(sq, $(this).position().top, $(this).position().left) == BOOL.TRUE) {
-			$(this).remove();
-		}
-	} );
-	
-}
-
-function AddGUIPiece(sq, pce) {
-
-	var file = FilesBrd[sq];
-	var rank = RanksBrd[sq];
-	var rankName = "rank" + (rank+1);
-	var	fileName = "file" + (file+1);
-	var pieceFileName = "images/" + SideChar[PieceCol[pce]] + PceChar[pce].toUpperCase() + ".png";
-	var	imageString = "<image src=\"" + pieceFileName + "\" class=\"Piece " + rankName + " " + fileName + "\"/>";
-	$("#Board").append(imageString);
-}
-
-function MoveGUIPiece(move) {
-	
-	var from = FROMSQ(move);
-	var to = TOSQ(move);	
-	
-	if(move & MFLAGEP) {
-		var epRemove;
-		if(GameBoard.side == COLOURS.BLACK) {
-			epRemove = to - 10;
-		} else {
-			epRemove = to + 10;
-		}
-		RemoveGUIPiece(epRemove);
-	} else if(CAPTURED(move)) {
-		RemoveGUIPiece(to);
-	}
-	
-	var file = FilesBrd[to];
-	var rank = RanksBrd[to];
-	var rankName = "rank" + (rank+1);
-	var	fileName = "file" + (file+1);
-	
-	$('.Piece').each( function(index) {
-		if(PieceIsOnSq(from, $(this).position().top, $(this).position().left) == BOOL.TRUE) {
-			$(this).removeClass();
-			$(this).addClass("Piece " + rankName + " " + fileName);
-		}
-	} );
-	
-	if(move & MFLAGCA) {
-		switch(to) {
-			case SQUARES.G1: RemoveGUIPiece(SQUARES.H1); AddGUIPiece(SQUARES.F1, PIECES.wR); break;
-			case SQUARES.C1: RemoveGUIPiece(SQUARES.A1); AddGUIPiece(SQUARES.D1, PIECES.wR); break;
-			case SQUARES.G8: RemoveGUIPiece(SQUARES.H8); AddGUIPiece(SQUARES.F8, PIECES.bR); break;
-			case SQUARES.C8: RemoveGUIPiece(SQUARES.A8); AddGUIPiece(SQUARES.D8, PIECES.bR); break;
-		}
-	} else if (PROMOTED(move)) {
-		RemoveGUIPiece(to);
-		AddGUIPiece(to, PROMOTED(move));
-	}
-	
 }
 
 function DrawMaterial() {
 
-	if (GameBoard.pceNum[PIECES.wP]!=0 || GameBoard.pceNum[PIECES.bP]!=0) return BOOL.FALSE;
-	if (GameBoard.pceNum[PIECES.wQ]!=0 || GameBoard.pceNum[PIECES.bQ]!=0 ||
-					GameBoard.pceNum[PIECES.wR]!=0 || GameBoard.pceNum[PIECES.bR]!=0) return BOOL.FALSE;
-	if (GameBoard.pceNum[PIECES.wB] > 1 || GameBoard.pceNum[PIECES.bB] > 1) {return BOOL.FALSE;}
-    if (GameBoard.pceNum[PIECES.wN] > 1 || GameBoard.pceNum[PIECES.bN] > 1) {return BOOL.FALSE;}
+	if (board.pceNum[Pieces.wP]!=0 || board.pceNum[Pieces.bP]!=0) return 0;
+	if (board.pceNum[Pieces.wQ]!=0 || board.pceNum[Pieces.bQ]!=0 ||
+					board.pceNum[Pieces.wR]!=0 || board.pceNum[Pieces.bR]!=0) return 0;
+	if (board.pceNum[Pieces.wB] > 1 || board.pceNum[Pieces.bB] > 1) {return 0;}
+    if (board.pceNum[Pieces.wN] > 1 || board.pceNum[Pieces.bN] > 1) {return 0;}
 	
-	if (GameBoard.pceNum[PIECES.wN]!=0 && GameBoard.pceNum[PIECES.wB]!=0) {return BOOL.FALSE;}
-	if (GameBoard.pceNum[PIECES.bN]!=0 && GameBoard.pceNum[PIECES.bB]!=0) {return BOOL.FALSE;}
+	if (board.pceNum[Pieces.wN]!=0 && board.pceNum[Pieces.wB]!=0) {return 0;}
+	if (board.pceNum[Pieces.bN]!=0 && board.pceNum[Pieces.bB]!=0) {return 0;}
 	 
-	return BOOL.TRUE;
+	return 1;
 }
 
 function ThreeFoldRep() {
 	var i = 0, r = 0;
 	
-	for(i = 0; i < GameBoard.hisPly; ++i) {
-		if (GameBoard.history[i].posKey == GameBoard.posKey) {
+	for(i = 0; i < board.hisPly; ++i) {
+		if (board.history[i].posKey == board.posKey) {
 		    r++;
 		}
 	}
@@ -239,19 +100,19 @@ function ThreeFoldRep() {
 }
 
 function CheckResult() {
-	if(GameBoard.fiftyMove >= 100) {
+	if(board.fiftyMove >= 100) {
 		 $("#GameStatus").text("GAME DRAWN {fifty move rule}"); 
-		 return BOOL.TRUE;
+		 return 1;
 	}
 	
 	if (ThreeFoldRep() >= 2) {
      	$("#GameStatus").text("GAME DRAWN {3-fold repetition}"); 
-     	return BOOL.TRUE;
+     	return 1;
     }
 	
-	if (DrawMaterial() == BOOL.TRUE) {
+	if (DrawMaterial() == 1) {
      	$("#GameStatus").text("GAME DRAWN {insufficient material to mate}"); 
-     	return BOOL.TRUE;
+     	return 1;
     }
     
     GenerateMoves();
@@ -259,9 +120,9 @@ function CheckResult() {
     var MoveNum = 0;
 	var found = 0;
 	
-	for(MoveNum = GameBoard.moveListStart[GameBoard.ply]; MoveNum < GameBoard.moveListStart[GameBoard.ply + 1]; ++MoveNum)  {	
+	for(MoveNum = board.moveListStart[board.ply]; MoveNum < board.moveListStart[board.ply + 1]; ++MoveNum)  {	
        
-        if ( MakeMove(GameBoard.moveList[MoveNum]) == BOOL.FALSE)  {
+        if ( MakeMove(board.moveList[MoveNum]) == 0)  {
             continue;
         }
         found++;
@@ -269,105 +130,172 @@ function CheckResult() {
 		break;
     }
 	
-	if(found != 0) return BOOL.FALSE;
+	if(found != 0) return 0;
 	
-	var InCheck = SqAttacked(GameBoard.pList[PCEINDEX(Kings[GameBoard.side],0)], GameBoard.side^1);
+	var InCheck = SqAttacked(board.pList[PCEINDEX(Kings[board.side],0)], board.side^1);
 	
-	if(InCheck == BOOL.TRUE) {
-		if(GameBoard.side == COLOURS.WHITE) {
+	if(InCheck == 1) {
+		if(board.side == COLOURS.WHITE) {
 	      $("#GameStatus").text("GAME OVER {black mates}");
-	      return BOOL.TRUE;
+	      return 1;
         } else {
 	      $("#GameStatus").text("GAME OVER {white mates}");
-	      return BOOL.TRUE;
+	      return 1;
         }
 	} else {
-		$("#GameStatus").text("GAME DRAWN {stalemate}");return BOOL.TRUE;
+		$("#GameStatus").text("GAME DRAWN {stalemate}");return 1;
 	}
 	
-	return BOOL.FALSE;	
+	return 0;	
 }
 
 function CheckAndSet() {
-	if(CheckResult() == BOOL.TRUE) {
-		GameController.GameOver = BOOL.TRUE;
+	if(CheckResult() == 1) {
+		GameController.GameOver = 1;
 	} else {
-		GameController.GameOver = BOOL.FALSE;
+		GameController.GameOver = 0;
 		$("#GameStatus").text('');
 	}
 }
 
 function PreSearch() {
-	if(GameController.GameOver == BOOL.FALSE) {
-		SearchController.thinking = BOOL.TRUE;
+	if(GameController.GameOver == 0) {
+		controller.thinking = 1;
 		setTimeout( function() { StartSearch(); }, 200 );
 	}
 }
 
-$('#SearchButton').click( function () {	
-	GameController.PlayerSide = GameController.side ^ 1;
-	PreSearch();
-});
-
 function StartSearch() {
 
-	SearchController.depth = MAXDEPTH;
+	controller.depth = MaxDepth;
 	var t = $.now();
 	var tt = 2;
 	
-	SearchController.time = parseInt(tt) * 1000;
+	controller.time = parseInt(tt) * 1000;
 	SearchPosition();
 	
-	MakeMove(SearchController.best);
-	MoveGUIPiece(SearchController.best);
+	MakeMove(controller.best);
 	CheckAndSet();
 	
-	PrintBoard();
-    placePieces();
+	if (DEBUG) PrintBoard();
+    UpdateGui();
 }
 
+var boardArray = [
+	[4,2,3,5,6,3,2,4],
+	[1,1,1,1,1,1,1,1],
+	[0,0,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0],
+	[0,0,0,0,0,0,0,0],
+	[7,7,7,7,7,7,7,7],
+	[10,8,9,11,12,9,8,10]];
+  
+String.prototype.replaceAt = function(index, replacement) {
+	return this.substr(0, index) + replacement + this.substr(index + replacement.length);
+}
+  
+function UpdateGui() {
+	var boardId;
+	var boardTile;
 
+	var sq,file,rank,piece;
 
+	for(rank = 7; rank >= 0; rank--) {
+		var line =(RankChar[rank] + "  ");
+		for(file = 0; file <= 7; file++) {
+			sq = FR2SQ(file,rank);
+			piece = board.Pieces[sq];
+			boardArray[rank][file] = piece;
+		}
+	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	for (x = 0; x < 8; x++) {
+		for (y = 0; y < 8; y++) {
+		boardId = String.fromCharCode(97 + x) + String(y + 1);
+		if ((y + 7 * x) % 2 != 0) {
+			boardTile = ':::::::::::::::::<br>:::::::::::::::::<br>:::::::::::::::::<br>:::::::::::::::::<br>:::::::::::::::::<br>:::::::::::::::::<br>:::::::::::::::::<br>';
+		} else {
+			boardTile = '                 <br>                 <br>                 <br>                 <br>                 <br>                 <br>                 <br>';
+		}
+		if (boardArray[y][x] == 7) {
+			boardTile = boardTile.replaceAt(29,    '_');
+			boardTile = boardTile.replaceAt(49,   '( )');
+			boardTile = boardTile.replaceAt(69,  '/   \\');
+			boardTile = boardTile.replaceAt(90,  ')   (');
+			boardTile = boardTile.replaceAt(110,'{_____}');
+		} else if (boardArray[y][x] == 1) {
+			boardTile = boardTile.replaceAt(29,    '_');
+			boardTile = boardTile.replaceAt(49,   '(#)');
+			boardTile = boardTile.replaceAt(69,  '/#%#\\');
+			boardTile = boardTile.replaceAt(90,  ')%#%(');
+			boardTile = boardTile.replaceAt(110,'{_#_#_}');
+		} else if (boardArray[y][x] == 10) {
+			boardTile = boardTile.replaceAt(26, '|\'\-\'\-\'\|');
+			boardTile = boardTile.replaceAt(48,  '|   |');
+			boardTile = boardTile.replaceAt(69,  '|   |');
+			boardTile = boardTile.replaceAt(90,  '/___\\');
+			boardTile = boardTile.replaceAt(110,'{_____}');
+		} else if (boardArray[y][x] == 4) {
+			boardTile = boardTile.replaceAt(26, '|\'\-\'\-\'\|');
+			boardTile = boardTile.replaceAt(48,  '|#%#|');
+			boardTile = boardTile.replaceAt(69,  '|%#%|');
+			boardTile = boardTile.replaceAt(90,  '/#_#\\');
+			boardTile = boardTile.replaceAt(110,'{#_#_#}');
+		} else if (boardArray[y][x] == 8) {
+			boardTile = boardTile.replaceAt(27,  '_^^');
+			boardTile = boardTile.replaceAt(46,'/_ • |>');
+			boardTile = boardTile.replaceAt(70,   '/ |>');
+			boardTile = boardTile.replaceAt(90,  '/   \\');
+			boardTile = boardTile.replaceAt(110,'{_____}');
+		} else if (boardArray[y][x] == 2) {
+			boardTile = boardTile.replaceAt(27,  '_^^');
+			boardTile = boardTile.replaceAt(46,'/_ •%|>');
+			boardTile = boardTile.replaceAt(70,   '/#|>');
+			boardTile = boardTile.replaceAt(90,  '/#%#\\');
+			boardTile = boardTile.replaceAt(110,'{#_#_#}');
+		} else if (boardArray[y][x] == 9) {
+			boardTile = boardTile.replaceAt(28,   '_^_');
+			boardTile = boardTile.replaceAt(49,  '\\ /');
+			boardTile = boardTile.replaceAt(70,   '} {');
+			boardTile = boardTile.replaceAt(90,  '/   \\');
+			boardTile = boardTile.replaceAt(110,'{_____}');
+		} else if (boardArray[y][x] == 3) {
+			boardTile = boardTile.replaceAt(28,   '_^_');
+			boardTile = boardTile.replaceAt(49,  '\\%/');
+			boardTile = boardTile.replaceAt(70,   '}#{');
+			boardTile = boardTile.replaceAt(90,  '/#%#\\');
+			boardTile = boardTile.replaceAt(110,'{#_#_#}');
+		} else if (boardArray[y][x] == 11) {
+			boardTile = boardTile.replaceAt(7,    '_◦_');
+			boardTile = boardTile.replaceAt(28,   '/ \\');
+			boardTile = boardTile.replaceAt(49,   '} {');
+			boardTile = boardTile.replaceAt(69, '\/   \\');
+			boardTile = boardTile.replaceAt(90,  ')   (');
+			boardTile = boardTile.replaceAt(110,'{_____}');
+		} else if (boardArray[y][x] == 5) {
+			boardTile = boardTile.replaceAt(7,    '_◦_');
+			boardTile = boardTile.replaceAt(28,   '/%\\');
+			boardTile = boardTile.replaceAt(49,   '}#{');
+			boardTile = boardTile.replaceAt(69, '\/#%#\\');
+			boardTile = boardTile.replaceAt(90,  ')%#%(');
+			boardTile = boardTile.replaceAt(110,'{_#_#_}');
+		} else if (boardArray[y][x] == 12) {
+			boardTile = boardTile.replaceAt(7,    '_+_');
+			boardTile = boardTile.replaceAt(27,  '/   \\');
+			boardTile = boardTile.replaceAt(48,  '}   {');
+			boardTile = boardTile.replaceAt(69, '\/   \\');
+			boardTile = boardTile.replaceAt(89, '(     )');
+			boardTile = boardTile.replaceAt(110,'{_____}');
+		} else if (boardArray[y][x] == 6) {
+			boardTile = boardTile.replaceAt(7,    '_+_');
+			boardTile = boardTile.replaceAt(27,  '/#%#\\');
+			boardTile = boardTile.replaceAt(48,  '}%#%{');
+			boardTile = boardTile.replaceAt(69, '\/#%#\\');
+			boardTile = boardTile.replaceAt(89, '(#%#%#)');
+			boardTile = boardTile.replaceAt(110,'{_#_#_}');
+		}
+		document.getElementById(boardId).innerHTML = boardTile;
+		}
+	}
+}

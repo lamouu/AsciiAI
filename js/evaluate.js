@@ -48,81 +48,81 @@ var BishopPair = 40;
 
 function EvalPosition() {
 	
-	var score = GameBoard.material[COLOURS.WHITE] - GameBoard.material[COLOURS.BLACK];
+	var score = board.material[COLOURS.WHITE] - board.material[COLOURS.BLACK];
 	
 	var pce;
 	var sq;
 	var pceNum;
 	
-	pce = PIECES.wP;
-	for(pceNum = 0; pceNum < GameBoard.pceNum[pce]; ++pceNum) {
-		sq = GameBoard.pList[PCEINDEX(pce,pceNum)];
+	pce = Pieces.wP;
+	for(pceNum = 0; pceNum < board.pceNum[pce]; ++pceNum) {
+		sq = board.pList[PCEINDEX(pce,pceNum)];
 		score += PawnTable[SQ64(sq)];
 	}
 	
-	pce = PIECES.bP;
-	for(pceNum = 0; pceNum < GameBoard.pceNum[pce]; ++pceNum) {
-		sq = GameBoard.pList[PCEINDEX(pce,pceNum)];
+	pce = Pieces.bP;
+	for(pceNum = 0; pceNum < board.pceNum[pce]; ++pceNum) {
+		sq = board.pList[PCEINDEX(pce,pceNum)];
 		score -= PawnTable[MIRROR64(SQ64(sq))];
 	}
 	
-	pce = PIECES.wN;	
-	for(pceNum = 0; pceNum < GameBoard.pceNum[pce]; ++pceNum) {
-		sq = GameBoard.pList[PCEINDEX(pce,pceNum)];
+	pce = Pieces.wN;	
+	for(pceNum = 0; pceNum < board.pceNum[pce]; ++pceNum) {
+		sq = board.pList[PCEINDEX(pce,pceNum)];
 		score += KnightTable[SQ64(sq)];
 	}	
 
-	pce = PIECES.bN;	
-	for(pceNum = 0; pceNum < GameBoard.pceNum[pce]; ++pceNum) {
-		sq = GameBoard.pList[PCEINDEX(pce,pceNum)];
+	pce = Pieces.bN;	
+	for(pceNum = 0; pceNum < board.pceNum[pce]; ++pceNum) {
+		sq = board.pList[PCEINDEX(pce,pceNum)];
 		score -= KnightTable[MIRROR64(SQ64(sq))];
 	}			
 	
-	pce = PIECES.wB;	
-	for(pceNum = 0; pceNum < GameBoard.pceNum[pce]; ++pceNum) {
-		sq = GameBoard.pList[PCEINDEX(pce,pceNum)];
+	pce = Pieces.wB;	
+	for(pceNum = 0; pceNum < board.pceNum[pce]; ++pceNum) {
+		sq = board.pList[PCEINDEX(pce,pceNum)];
 		score += BishopTable[SQ64(sq)];
 	}	
 
-	pce = PIECES.bB;	
-	for(pceNum = 0; pceNum < GameBoard.pceNum[pce]; ++pceNum) {
-		sq = GameBoard.pList[PCEINDEX(pce,pceNum)];
+	pce = Pieces.bB;	
+	for(pceNum = 0; pceNum < board.pceNum[pce]; ++pceNum) {
+		sq = board.pList[PCEINDEX(pce,pceNum)];
 		score -= BishopTable[MIRROR64(SQ64(sq))];
 	}
 	
-	pce = PIECES.wR;	
-	for(pceNum = 0; pceNum < GameBoard.pceNum[pce]; ++pceNum) {
-		sq = GameBoard.pList[PCEINDEX(pce,pceNum)];
+	pce = Pieces.wR;	
+	for(pceNum = 0; pceNum < board.pceNum[pce]; ++pceNum) {
+		sq = board.pList[PCEINDEX(pce,pceNum)];
 		score += RookTable[SQ64(sq)];
 	}	
 
-	pce = PIECES.bR;	
-	for(pceNum = 0; pceNum < GameBoard.pceNum[pce]; ++pceNum) {
-		sq = GameBoard.pList[PCEINDEX(pce,pceNum)];
+	pce = Pieces.bR;	
+	for(pceNum = 0; pceNum < board.pceNum[pce]; ++pceNum) {
+		sq = board.pList[PCEINDEX(pce,pceNum)];
 		score -= RookTable[MIRROR64(SQ64(sq))];
 	}
 	
-	pce = PIECES.wQ;	
-	for(pceNum = 0; pceNum < GameBoard.pceNum[pce]; ++pceNum) {
-		sq = GameBoard.pList[PCEINDEX(pce,pceNum)];
+	pce = Pieces.wQ;	
+	for(pceNum = 0; pceNum < board.pceNum[pce]; ++pceNum) {
+		sq = board.pList[PCEINDEX(pce,pceNum)];
 		score += RookTable[SQ64(sq)];
 	}	
 
-	pce = PIECES.bQ;	
-	for(pceNum = 0; pceNum < GameBoard.pceNum[pce]; ++pceNum) {
-		sq = GameBoard.pList[PCEINDEX(pce,pceNum)];
+	pce = Pieces.bQ;	
+	for(pceNum = 0; pceNum < board.pceNum[pce]; ++pceNum) {
+		sq = board.pList[PCEINDEX(pce,pceNum)];
 		score -= RookTable[MIRROR64(SQ64(sq))];
 	}	
 	
-	if(GameBoard.pceNum[PIECES.wB] >= 2) {
+	if(board.pceNum[Pieces.wB] >= 2) {
 		score += BishopPair;
 	}
 	
-	if(GameBoard.pceNum[PIECES.bB] >= 2) {
+	if(board.pceNum[Pieces.bB] >= 2) {
 		score -= BishopPair;
 	}
 	
-	if(GameBoard.side == COLOURS.WHITE) {
+	if(board.side == COLOURS.WHITE) {
 		return score;
 	} else {
 		return -score;

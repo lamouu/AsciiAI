@@ -1,19 +1,13 @@
-var PIECES =  { EMPTY : 0, wP : 1, wN : 2, wB : 3,wR : 4, wQ : 5, wK : 6, 
+var Pieces =  { EMPTY : 0, wP : 1, wN : 2, wB : 3,wR : 4, wQ : 5, wK : 6, 
               bP : 7, bN : 8, bB : 9, bR : 10, bQ : 11, bK : 12  };
               
-var BRD_SQ_NUM = 120;
-
-var FILES =  { FILE_A:0, FILE_B:1, FILE_C:2, FILE_D:3, 
-	FILE_E:4, FILE_F:5, FILE_G:6, FILE_H:7, FILE_NONE:8 };
-	
-var RANKS =  { RANK_1:0, RANK_2:1, RANK_3:2, RANK_4:3, 
-	RANK_5:4, RANK_6:5, RANK_7:6, RANK_8:7, RANK_NONE:8 };
+var BrdSqNum = 120;
 	
 var COLOURS = { WHITE:0, BLACK:1, BOTH:2 };
 
 var CASTLEBIT = { WKCA : 1, WQCA : 2, BKCA : 4, BQCA : 8 };
 
-var SQUARES = {
+var Squares = {
   A1:21, B1:22, C1:23, D1:24, E1:25, F1:26, G1:27, H1:28,  
   A8:91, B8:92, C8:93, D8:94, E8:95, F8:96, G8:97, H8:98, 
   NO_SQ:99, OFFBOARD:100
@@ -21,17 +15,17 @@ var SQUARES = {
 
 var BOOL = { FALSE:0, TRUE:1 };
 
-var MAXGAMEMOVES = 2048;
-var MAXPOSITIONMOVES = 256;
-var MAXDEPTH = 64;
-var INFINITE = 30000;
-var MATE = 29000;
-var PVENTRIES = 10000;
+var MaxGameMoves = 2048;
+var MaxPositionMoves = 256;
+var MaxDepth = 64;
+var Infinite = 30000;
+var Mate = 29000;
+var PvEntries = 10000;
 
-var FilesBrd = new Array(BRD_SQ_NUM);
-var RanksBrd = new Array(BRD_SQ_NUM);
+var FilesBrd = new Array(BrdSqNum);
+var RanksBrd = new Array(BrdSqNum);
 
-var START_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+var StartFEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
 var PceChar = ".PNBRQKpnbrqk";
 var SideChar = "wb-";
@@ -42,19 +36,19 @@ function FR2SQ(f,r) {
  	return ( (21 + (f) ) + ( (r) * 10 ) );
 }
 
-var PieceBig = [ BOOL.FALSE, BOOL.FALSE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE, BOOL.FALSE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE ];
-var PieceMaj = [ BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE ];
-var PieceMin = [ BOOL.FALSE, BOOL.FALSE, BOOL.TRUE, BOOL.TRUE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.TRUE, BOOL.TRUE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE ];
+var PieceBig = [ 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1 ];
+var PieceMaj = [ 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1 ];
+var PieceMin = [ 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0 ];
 var PieceVal = [ 0, 100, 325, 325, 550, 1000, 50000, 100, 325, 325, 550, 1000, 50000  ];
 var PieceCol = [ COLOURS.BOTH, COLOURS.WHITE, COLOURS.WHITE, COLOURS.WHITE, COLOURS.WHITE, COLOURS.WHITE, COLOURS.WHITE,
 	COLOURS.BLACK, COLOURS.BLACK, COLOURS.BLACK, COLOURS.BLACK, COLOURS.BLACK, COLOURS.BLACK ];
 	
-var PiecePawn = [ BOOL.FALSE, BOOL.TRUE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.TRUE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE ];	
-var PieceKnight = [ BOOL.FALSE, BOOL.FALSE, BOOL.TRUE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.TRUE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE ];
-var PieceKing = [ BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.TRUE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.TRUE ];
-var PieceRookQueen = [ BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.TRUE, BOOL.TRUE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.TRUE, BOOL.TRUE, BOOL.FALSE ];
-var PieceBishopQueen = [ BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.TRUE, BOOL.FALSE, BOOL.TRUE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.TRUE, BOOL.FALSE, BOOL.TRUE, BOOL.FALSE ];
-var PieceSlides = [ BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE, BOOL.FALSE, BOOL.FALSE, BOOL.FALSE, BOOL.TRUE, BOOL.TRUE, BOOL.TRUE, BOOL.FALSE ];
+var PiecePawn = [ 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0 ];	
+var PieceKnight = [ 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 ];
+var PieceKing = [ 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1 ];
+var PieceRookQueen = [ 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0 ];
+var PieceBishopQueen = [ 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0 ];
+var Pieceslides = [ 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0 ];
 
 var KnDir = [ -8, -19,	-21, -12, 8, 19, 21, 12 ];
 var RkDir = [ -1, -10,	1, 10 ];
@@ -63,16 +57,16 @@ var KiDir = [ -1, -10,	1, 10, -9, -11, 11, 9 ];
 
 var DirNum = [ 0, 0, 8, 4, 4, 8, 8, 0, 8, 4, 4, 8, 8 ];
 var PceDir = [ 0, 0, KnDir, BiDir, RkDir, KiDir, KiDir, 0, KnDir, BiDir, RkDir, KiDir, KiDir ];
-var LoopNonSlidePce = [ PIECES.wN, PIECES.wK, 0, PIECES.bN, PIECES.bK, 0 ];
+var LoopNonSlidePce = [ Pieces.wN, Pieces.wK, 0, Pieces.bN, Pieces.bK, 0 ];
 var LoopNonSlideIndex = [ 0, 3 ];
-var LoopSlidePce = [ PIECES.wB, PIECES.wR, PIECES.wQ, 0, PIECES.bB, PIECES.bR, PIECES.bQ, 0 ];
+var LoopSlidePce = [ Pieces.wB, Pieces.wR, Pieces.wQ, 0, Pieces.bB, Pieces.bR, Pieces.bQ, 0 ];
 var LoopSlideIndex = [ 0, 4 ];
 
 var PieceKeys = new Array(14 * 120);
 var SideKey;
 var CastleKeys = new Array(16);
 
-var Sq120ToSq64 = new Array(BRD_SQ_NUM);
+var Sq120ToSq64 = new Array(BrdSqNum);
 var Sq64ToSq120 = new Array(64);
 
 function RAND_32() {
@@ -109,7 +103,7 @@ function MIRROR64(sq) {
 	return Mirror64[sq];
 }
 
-var Kings = [PIECES.wK, PIECES.bK];
+var Kings = [Pieces.wK, Pieces.bK];
 var CastlePerm = [
     15, 15, 15, 15, 15, 15, 15, 15, 15, 15,
     15, 15, 15, 15, 15, 15, 15, 15, 15, 15,
@@ -135,7 +129,6 @@ var CastlePerm = [
 0001 0000 0000 0000 0000 0000 0000 -> Castle 0x1000000
 */
 
-
 function FROMSQ(m) { return (m & 0x7F); }
 function TOSQ(m) { return ( (m >> 7) & 0x7F); }
 function CAPTURED(m) { return ( (m >> 14) & 0xF); }
@@ -151,26 +144,26 @@ var MFLAGPROM = 0xF00000;
 var NOMOVE = 0;
 
 function SQOFFBOARD(sq) {
-	if(FilesBrd[sq]==SQUARES.OFFBOARD) return BOOL.TRUE;
-	return BOOL.FALSE;	
+	if(FilesBrd[sq]==Squares.OFFBOARD) return 1;
+	return 0;	
 }
 
 function HASH_PCE(pce, sq) {
-	GameBoard.posKey ^= PieceKeys[(pce * 120) + sq];
+	board.posKey ^= PieceKeys[(pce * 120) + sq];
 }
 
-function HASH_CA() { GameBoard.posKey ^= CastleKeys[GameBoard.castlePerm]; }
-function HASH_SIDE() { GameBoard.posKey ^= SideKey; }
-function HASH_EP() { GameBoard.posKey ^= PieceKeys[GameBoard.enPas]; }
+function HASH_CA() { board.posKey ^= CastleKeys[board.castlePerm]; }
+function HASH_SIDE() { board.posKey ^= SideKey; }
+function HASH_EP() { board.posKey ^= PieceKeys[board.enPas]; }
 
 var GameController = {};
 GameController.EngineSide = COLOURS.BOTH;
 GameController.PlayerSide = COLOURS.BOTH;
-GameController.GameOver = BOOL.FALSE;
+GameController.GameOver = 0;
 
 var UserMove = {};
-UserMove.from = SQUARES.NO_SQ;
-UserMove.to = SQUARES.NO_SQ;
+UserMove.from = Squares.NO_SQ;
+UserMove.to = Squares.NO_SQ;
 
 
 

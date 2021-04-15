@@ -14,13 +14,13 @@ function PrMove(move) {
 	
 	var promoted = PROMOTED(move);
 
-	if(promoted != PIECES.EMPTY) {
+	if(promoted != Pieces.EMPTY) {
 		var pchar = 'q';
-		if(PieceKnight[promoted] == BOOL.TRUE) {
+		if(PieceKnight[promoted] == 1) {
 			pchar = 'n';
-		} else if(PieceRookQueen[promoted] == BOOL.TRUE && PieceBishopQueen[promoted] == BOOL.FALSE)  {
+		} else if(PieceRookQueen[promoted] == 1 && PieceBishopQueen[promoted] == 0)  {
 			pchar = 'r';
-		} else if(PieceRookQueen[promoted] == BOOL.FALSE && PieceBishopQueen[promoted] == BOOL.TRUE)   {
+		} else if(PieceRookQueen[promoted] == 0 && PieceBishopQueen[promoted] == 1)   {
 			pchar = 'b';
 		}
 		MvStr += pchar;
@@ -35,9 +35,9 @@ function PrintMoveList() {
 	var num = 1;
 	console.log('MoveList:');
 
-	for(index = GameBoard.moveListStart[GameBoard.ply]; index < GameBoard.moveListStart[GameBoard.ply+1]; ++index) {
-		move = GameBoard.moveList[index];
-		console.log('IMove:' + num + ':(' + index + '):' + PrMove(move) + ' Score:' +  GameBoard.moveScores[index]);
+	for(index = board.moveListStart[board.ply]; index < board.moveListStart[board.ply+1]; ++index) {
+		move = board.moveList[index];
+		console.log('IMove:' + num + ':(' + index + '):' + PrMove(move) + ' Score:' +  board.moveScores[index]);
 		num++;
 	}
 	console.log('End MoveList');
@@ -48,29 +48,29 @@ function ParseMove(from, to) {
 	GenerateMoves();
 	
 	var Move = NOMOVE;
-	var PromPce = PIECES.EMPTY;
-	var found = BOOL.FALSE;
+	var PromPce = Pieces.EMPTY;
+	var found = 0;
 	
-	for(index = GameBoard.moveListStart[GameBoard.ply]; 
-							index < GameBoard.moveListStart[GameBoard.ply + 1]; ++index) {	
-		Move = GameBoard.moveList[index];
+	for(index = board.moveListStart[board.ply]; 
+							index < board.moveListStart[board.ply + 1]; ++index) {	
+		Move = board.moveList[index];
 		if(FROMSQ(Move) == from && TOSQ(Move) == to) {
 			PromPce = PROMOTED(Move);
-			if(PromPce != PIECES.EMPTY) {
-				if( (PromPce == PIECES.wQ && GameBoard.side == COLOURS.WHITE) ||
-					(PromPce == PIECES.bQ && GameBoard.side == COLOURS.BLACK) ) {
-					found = BOOL.TRUE;
+			if(PromPce != Pieces.EMPTY) {
+				if( (PromPce == Pieces.wQ && board.side == COLOURS.WHITE) ||
+					(PromPce == Pieces.bQ && board.side == COLOURS.BLACK) ) {
+					found = 1;
 					break;
 				}
 				continue;
 			}
-			found = BOOL.TRUE;
+			found = 1;
 			break;
 		}		
 	}
 	
-	if(found != BOOL.FALSE) {
-		if(MakeMove(Move) == BOOL.FALSE) {
+	if(found != 0) {
+		if(MakeMove(Move) == 0) {
 			return NOMOVE;
 		}
 		TakeMove();
