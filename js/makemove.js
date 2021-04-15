@@ -7,7 +7,7 @@ function ClearPiece(sq) {
 	
 	HASH_PCE(pce, sq);
 	
-	board.Pieces[sq] = Pieces.EMPTY;
+	board.Pieces[sq] = Pieces.empty;
 	board.material[col] -= PieceVal[pce];
 	
 	for(index = 0; index < board.pceNum[pce]; ++index) {
@@ -41,7 +41,7 @@ function MovePiece(from, to) {
 	var pce = board.Pieces[from];
 	
 	HASH_PCE(pce, from);
-	board.Pieces[from] = Pieces.EMPTY;
+	board.Pieces[from] = Pieces.empty;
 	
 	HASH_PCE(pce,to);
 	board.Pieces[to] = pce;
@@ -63,7 +63,7 @@ function MakeMove(move) {
 	board.history[board.hisPly].posKey = board.posKey;
 
 	if( (move & MFLAGEP) != 0) {
-		if(side == COLOURS.WHITE) {
+		if(side == 0) {
 			ClearPiece(to-10);
 		} else {
 			ClearPiece(to+10);
@@ -86,7 +86,7 @@ function MakeMove(move) {
 		}
 	}
 	
-	if(board.enPas != Squares.NO_SQ) HASH_EP();
+	if(board.enPas != Squares.NoSq) HASH_EP();
 	HASH_CA();
 	
 	board.history[board.hisPly].move = move;
@@ -96,14 +96,14 @@ function MakeMove(move) {
     
     board.castlePerm &= CastlePerm[from];
     board.castlePerm &= CastlePerm[to];
-    board.enPas = Squares.NO_SQ;
+    board.enPas = Squares.NoSq;
     
     HASH_CA();
     
     var captured = CAPTURED(move);
     board.fiftyMove++;
     
-    if(captured != Pieces.EMPTY) {
+    if(captured != Pieces.empty) {
         ClearPiece(to);
         board.fiftyMove = 0;
     }
@@ -114,7 +114,7 @@ function MakeMove(move) {
 	if(PiecePawn[board.Pieces[from]] == 1) {
         board.fiftyMove = 0;
         if( (move & MFLAGPS) != 0) {
-            if(side==COLOURS.WHITE) {
+            if(side==0) {
                 board.enPas=from+10;
             } else {
                 board.enPas=from-10;
@@ -126,7 +126,7 @@ function MakeMove(move) {
     MovePiece(from, to);
     
     var prPce = PROMOTED(move);
-    if(prPce != Pieces.EMPTY)   {       
+    if(prPce != Pieces.empty)   {       
         ClearPiece(to);
         AddPiece(to, prPce);
     }
@@ -151,21 +151,21 @@ function TakeMove() {
 	var from = FROMSQ(move);
     var to = TOSQ(move);
     
-    if(board.enPas != Squares.NO_SQ) HASH_EP();
+    if(board.enPas != Squares.NoSq) HASH_EP();
     HASH_CA();
     
     board.castlePerm = board.history[board.hisPly].castlePerm;
     board.fiftyMove = board.history[board.hisPly].fiftyMove;
     board.enPas = board.history[board.hisPly].enPas;
     
-    if(board.enPas != Squares.NO_SQ) HASH_EP();
+    if(board.enPas != Squares.NoSq) HASH_EP();
     HASH_CA();
     
     board.side ^= 1;
     HASH_SIDE();
     
     if( (MFLAGEP & move) != 0) {
-        if(board.side == COLOURS.WHITE) {
+        if(board.side == 0) {
             AddPiece(to-10, Pieces.bP);
         } else {
             AddPiece(to+10, Pieces.wP);
@@ -183,13 +183,13 @@ function TakeMove() {
     MovePiece(to, from);
     
     var captured = CAPTURED(move);
-    if(captured != Pieces.EMPTY) {      
+    if(captured != Pieces.empty) {      
         AddPiece(to, captured);
     }
     
-    if(PROMOTED(move) != Pieces.EMPTY)   {        
+    if(PROMOTED(move) != Pieces.empty)   {        
         ClearPiece(from);
-        AddPiece(from, (PieceCol[PROMOTED(move)] == COLOURS.WHITE ? Pieces.wP : Pieces.bP));
+        AddPiece(from, (PieceCol[PROMOTED(move)] == 0 ? Pieces.wP : Pieces.bP));
     }
     
 }

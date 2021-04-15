@@ -14,7 +14,7 @@ function PrMove(move) {
 	
 	var promoted = PROMOTED(move);
 
-	if(promoted != Pieces.EMPTY) {
+	if(promoted != Pieces.empty) {
 		var pchar = 'q';
 		if(PieceKnight[promoted] == 1) {
 			pchar = 'n';
@@ -48,7 +48,7 @@ function ParseMove(from, to) {
 	GenerateMoves();
 	
 	var Move = NOMOVE;
-	var PromPce = Pieces.EMPTY;
+	var PromPce = Pieces.empty;
 	var found = 0;
 	
 	for(index = board.moveListStart[board.ply]; 
@@ -56,9 +56,9 @@ function ParseMove(from, to) {
 		Move = board.moveList[index];
 		if(FROMSQ(Move) == from && TOSQ(Move) == to) {
 			PromPce = PROMOTED(Move);
-			if(PromPce != Pieces.EMPTY) {
-				if( (PromPce == Pieces.wQ && board.side == COLOURS.WHITE) ||
-					(PromPce == Pieces.bQ && board.side == COLOURS.BLACK) ) {
+			if(PromPce != Pieces.empty) {
+				if( (PromPce == Pieces.wQ && board.side == 0) ||
+					(PromPce == Pieces.bQ && board.side == 1) ) {
 					found = 1;
 					break;
 				}

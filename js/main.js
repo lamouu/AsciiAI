@@ -15,8 +15,8 @@ function InitFilesRanksBrd() {
 	var sq = Squares.A1;
 	
 	for(index = 0; index < BrdSqNum; ++index) {
-		FilesBrd[index] = Squares.OFFBOARD;
-		RanksBrd[index] = Squares.OFFBOARD;
+		FilesBrd[index] = Squares.offboard;
+		RanksBrd[index] = Squares.offboard;
 	}
 	
 	for(rank = 0; rank <= 7; ++rank) {
@@ -150,7 +150,7 @@ function InitAsciiSquares() {
 		  document.getElementById(pos).addEventListener('click', function(e) {
 	  
 			if (board.Pieces[SQ120(x + (8 * y))] != 0) {
-			  if(UserMove.from == Squares.NO_SQ) {
+			  if(UserMove.from == Squares.NoSq) {
 				UserMove.from = SQ120(x + (8 * y));
 				SetSqSelected(SQ120(x + (8 * y)));
 			  } else {
@@ -161,7 +161,7 @@ function InitAsciiSquares() {
 			  MakeUserMove();
 	  
 			} else {
-			  if(UserMove.from != Squares.NO_SQ) {
+			  if(UserMove.from != Squares.NoSq) {
 				UserMove.to = SQ120(x + (8 * y));
 				SetSqSelected(SQ120(x + (8 * y)));
 				MakeUserMove();

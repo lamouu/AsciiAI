@@ -1,19 +1,20 @@
-var Pieces =  { EMPTY : 0, wP : 1, wN : 2, wB : 3,wR : 4, wQ : 5, wK : 6, 
+/*
+Files: A: 0, B: 1 ... none: 8
+Ranks: 1: 0, 2: 1 ... none: 8
+Colour: White: 0, Black: 1, Both: 2
+Castling: WK: 1, WQ: 2, BK: 4, BQ: 8
+*/
+
+var Pieces =  { empty : 0, wP : 1, wN : 2, wB : 3,wR : 4, wQ : 5, wK : 6, 
               bP : 7, bN : 8, bB : 9, bR : 10, bQ : 11, bK : 12  };
               
-var BrdSqNum = 120;
-	
-var COLOURS = { WHITE:0, BLACK:1, BOTH:2 };
-
-var CASTLEBIT = { WKCA : 1, WQCA : 2, BKCA : 4, BQCA : 8 };
-
 var Squares = {
   A1:21, B1:22, C1:23, D1:24, E1:25, F1:26, G1:27, H1:28,  
   A8:91, B8:92, C8:93, D8:94, E8:95, F8:96, G8:97, H8:98, 
-  NO_SQ:99, OFFBOARD:100
+  NoSq:99, offboard:100
 };
 
-var BOOL = { FALSE:0, TRUE:1 };
+var BrdSqNum = 120;
 
 var MaxGameMoves = 2048;
 var MaxPositionMoves = 256;
@@ -40,8 +41,8 @@ var PieceBig = [ 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1 ];
 var PieceMaj = [ 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1 ];
 var PieceMin = [ 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0 ];
 var PieceVal = [ 0, 100, 325, 325, 550, 1000, 50000, 100, 325, 325, 550, 1000, 50000  ];
-var PieceCol = [ COLOURS.BOTH, COLOURS.WHITE, COLOURS.WHITE, COLOURS.WHITE, COLOURS.WHITE, COLOURS.WHITE, COLOURS.WHITE,
-	COLOURS.BLACK, COLOURS.BLACK, COLOURS.BLACK, COLOURS.BLACK, COLOURS.BLACK, COLOURS.BLACK ];
+var PieceCol = [ 2, 0, 0, 0, 0, 0, 0,
+	1, 1, 1, 1, 1, 1 ];
 	
 var PiecePawn = [ 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0 ];	
 var PieceKnight = [ 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 ];
@@ -144,7 +145,7 @@ var MFLAGPROM = 0xF00000;
 var NOMOVE = 0;
 
 function SQOFFBOARD(sq) {
-	if(FilesBrd[sq]==Squares.OFFBOARD) return 1;
+	if(FilesBrd[sq]==Squares.offboard) return 1;
 	return 0;	
 }
 
@@ -157,13 +158,13 @@ function HASH_SIDE() { board.posKey ^= SideKey; }
 function HASH_EP() { board.posKey ^= PieceKeys[board.enPas]; }
 
 var GameController = {};
-GameController.EngineSide = COLOURS.BOTH;
-GameController.PlayerSide = COLOURS.BOTH;
+GameController.EngineSide = 2;
+GameController.PlayerSide = 2;
 GameController.GameOver = 0;
 
 var UserMove = {};
-UserMove.from = Squares.NO_SQ;
-UserMove.to = Squares.NO_SQ;
+UserMove.from = Squares.NoSq;
+UserMove.to = Squares.NoSq;
 
 
 

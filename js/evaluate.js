@@ -48,7 +48,7 @@ var BishopPair = 40;
 
 function EvalPosition() {
 	
-	var score = board.material[COLOURS.WHITE] - board.material[COLOURS.BLACK];
+	var score = board.material[0] - board.material[1];
 	
 	var pce;
 	var sq;
@@ -122,7 +122,7 @@ function EvalPosition() {
 		score -= BishopPair;
 	}
 	
-	if(board.side == COLOURS.WHITE) {
+	if(board.side == 0) {
 		return score;
 	} else {
 		return -score;

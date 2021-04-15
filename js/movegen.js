@@ -71,7 +71,7 @@ function AddWhitePawnCaptureMove(from, to, cap) {
 		AddCaptureMove(MOVE(from, to, cap, Pieces.wB, 0));
 		AddCaptureMove(MOVE(from, to, cap, Pieces.wN, 0));	
 	} else {
-		AddCaptureMove(MOVE(from, to, cap, Pieces.EMPTY, 0));	
+		AddCaptureMove(MOVE(from, to, cap, Pieces.empty, 0));	
 	}
 }
 
@@ -82,29 +82,29 @@ function AddBlackPawnCaptureMove(from, to, cap) {
 		AddCaptureMove(MOVE(from, to, cap, Pieces.bB, 0));
 		AddCaptureMove(MOVE(from, to, cap, Pieces.bN, 0));	
 	} else {
-		AddCaptureMove(MOVE(from, to, cap, Pieces.EMPTY, 0));	
+		AddCaptureMove(MOVE(from, to, cap, Pieces.empty, 0));	
 	}
 }
 
 function AddWhitePawnQuietMove(from, to) {
 	if(RanksBrd[from]==6) {
-		AddQuietMove(MOVE(from,to,Pieces.EMPTY,Pieces.wQ,0));
-		AddQuietMove(MOVE(from,to,Pieces.EMPTY,Pieces.wR,0));
-		AddQuietMove(MOVE(from,to,Pieces.EMPTY,Pieces.wB,0));
-		AddQuietMove(MOVE(from,to,Pieces.EMPTY,Pieces.wN,0));
+		AddQuietMove(MOVE(from,to,Pieces.empty,Pieces.wQ,0));
+		AddQuietMove(MOVE(from,to,Pieces.empty,Pieces.wR,0));
+		AddQuietMove(MOVE(from,to,Pieces.empty,Pieces.wB,0));
+		AddQuietMove(MOVE(from,to,Pieces.empty,Pieces.wN,0));
 	} else {
-		AddQuietMove(MOVE(from,to,Pieces.EMPTY,Pieces.EMPTY,0));	
+		AddQuietMove(MOVE(from,to,Pieces.empty,Pieces.empty,0));	
 	}
 }
 
 function AddBlackPawnQuietMove(from, to) {
 	if(RanksBrd[from]==1) {
-		AddQuietMove(MOVE(from,to,Pieces.EMPTY,Pieces.bQ,0));
-		AddQuietMove(MOVE(from,to,Pieces.EMPTY,Pieces.bR,0));
-		AddQuietMove(MOVE(from,to,Pieces.EMPTY,Pieces.bB,0));
-		AddQuietMove(MOVE(from,to,Pieces.EMPTY,Pieces.bN,0));
+		AddQuietMove(MOVE(from,to,Pieces.empty,Pieces.bQ,0));
+		AddQuietMove(MOVE(from,to,Pieces.empty,Pieces.bR,0));
+		AddQuietMove(MOVE(from,to,Pieces.empty,Pieces.bB,0));
+		AddQuietMove(MOVE(from,to,Pieces.empty,Pieces.bN,0));
 	} else {
-		AddQuietMove(MOVE(from,to,Pieces.EMPTY,Pieces.EMPTY,0));	
+		AddQuietMove(MOVE(from,to,Pieces.empty,Pieces.empty,0));	
 	}
 }
 
@@ -119,50 +119,50 @@ function GenerateMoves() {
 	var t_sq;
 	var dir;
 	
-	if(board.side == COLOURS.WHITE) {
+	if(board.side == 0) {
 		pceType = Pieces.wP;
 		
 		for(pceNum = 0; pceNum < board.pceNum[pceType]; ++pceNum) {
 			sq = board.pList[PCEINDEX(pceType, pceNum)];			
-			if(board.Pieces[sq + 10] == Pieces.EMPTY) {
+			if(board.Pieces[sq + 10] == Pieces.empty) {
 				AddWhitePawnQuietMove(sq, sq+10);
-				if(RanksBrd[sq] == 1 && board.Pieces[sq + 20] == Pieces.EMPTY) {
-					AddQuietMove( MOVE(sq, sq + 20, Pieces.EMPTY, Pieces.EMPTY, MFLAGPS ));
+				if(RanksBrd[sq] == 1 && board.Pieces[sq + 20] == Pieces.empty) {
+					AddQuietMove( MOVE(sq, sq + 20, Pieces.empty, Pieces.empty, MFLAGPS ));
 				}
 			}
 			
-			if(SQOFFBOARD(sq + 9) == 0 && PieceCol[board.Pieces[sq+9]] == COLOURS.BLACK) {
+			if(SQOFFBOARD(sq + 9) == 0 && PieceCol[board.Pieces[sq+9]] == 1) {
 				AddWhitePawnCaptureMove(sq, sq + 9, board.Pieces[sq+9]);
 			}
 			
-			if(SQOFFBOARD(sq + 11) == 0 && PieceCol[board.Pieces[sq+11]] == COLOURS.BLACK) {
+			if(SQOFFBOARD(sq + 11) == 0 && PieceCol[board.Pieces[sq+11]] == 1) {
 				AddWhitePawnCaptureMove(sq, sq + 11, board.Pieces[sq+11]);
 			}			
 			
-			if(board.enPas != Squares.NO_SQ) {
+			if(board.enPas != Squares.NoSq) {
 				if(sq + 9 == board.enPas) {
-					AddEnPassantMove( MOVE(sq, sq+9, Pieces.EMPTY, Pieces.EMPTY, MFLAGEP ) );
+					AddEnPassantMove( MOVE(sq, sq+9, Pieces.empty, Pieces.empty, MFLAGEP ) );
 				}
 				
 				if(sq + 11 == board.enPas) {
-					AddEnPassantMove( MOVE(sq, sq+11, Pieces.EMPTY, Pieces.EMPTY, MFLAGEP ) );
+					AddEnPassantMove( MOVE(sq, sq+11, Pieces.empty, Pieces.empty, MFLAGEP ) );
 				}
 			}			
 			
 		}
 		
-		if(board.castlePerm & CASTLEBIT.WKCA) {			
-			if(board.Pieces[Squares.F1] == Pieces.EMPTY && board.Pieces[Squares.G1] == Pieces.EMPTY) {
-				if(SqAttacked(Squares.F1, COLOURS.BLACK) == 0 && SqAttacked(Squares.E1, COLOURS.BLACK) == 0) {
-					AddQuietMove( MOVE(Squares.E1, Squares.G1, Pieces.EMPTY, Pieces.EMPTY, MFLAGCA ));
+		if(board.castlePerm & 1) {			
+			if(board.Pieces[Squares.F1] == Pieces.empty && board.Pieces[Squares.G1] == Pieces.empty) {
+				if(SqAttacked(Squares.F1, 1) == 0 && SqAttacked(Squares.E1, 1) == 0) {
+					AddQuietMove( MOVE(Squares.E1, Squares.G1, Pieces.empty, Pieces.empty, MFLAGCA ));
 				}
 			}
 		}
 		
-		if(board.castlePerm & CASTLEBIT.WQCA) {
-			if(board.Pieces[Squares.D1] == Pieces.EMPTY && board.Pieces[Squares.C1] == Pieces.EMPTY && board.Pieces[Squares.B1] == Pieces.EMPTY) {
-				if(SqAttacked(Squares.D1, COLOURS.BLACK) == 0 && SqAttacked(Squares.E1, COLOURS.BLACK) == 0) {
-					AddQuietMove( MOVE(Squares.E1, Squares.C1, Pieces.EMPTY, Pieces.EMPTY, MFLAGCA ));
+		if(board.castlePerm & 2) {
+			if(board.Pieces[Squares.D1] == Pieces.empty && board.Pieces[Squares.C1] == Pieces.empty && board.Pieces[Squares.B1] == Pieces.empty) {
+				if(SqAttacked(Squares.D1, 1) == 0 && SqAttacked(Squares.E1, 1) == 0) {
+					AddQuietMove( MOVE(Squares.E1, Squares.C1, Pieces.empty, Pieces.empty, MFLAGCA ));
 				}
 			}
 		}		
@@ -172,43 +172,43 @@ function GenerateMoves() {
 		
 		for(pceNum = 0; pceNum < board.pceNum[pceType]; ++pceNum) {
 			sq = board.pList[PCEINDEX(pceType, pceNum)];
-			if(board.Pieces[sq - 10] == Pieces.EMPTY) {
+			if(board.Pieces[sq - 10] == Pieces.empty) {
 				AddBlackPawnQuietMove(sq, sq-10);		
-				if(RanksBrd[sq] == 6 && board.Pieces[sq - 20] == Pieces.EMPTY) {
-					AddQuietMove( MOVE(sq, sq - 20, Pieces.EMPTY, Pieces.EMPTY, MFLAGPS ));
+				if(RanksBrd[sq] == 6 && board.Pieces[sq - 20] == Pieces.empty) {
+					AddQuietMove( MOVE(sq, sq - 20, Pieces.empty, Pieces.empty, MFLAGPS ));
 				}
 			}
 			
-			if(SQOFFBOARD(sq - 9) == 0 && PieceCol[board.Pieces[sq-9]] == COLOURS.WHITE) {
+			if(SQOFFBOARD(sq - 9) == 0 && PieceCol[board.Pieces[sq-9]] == 0) {
 				AddBlackPawnCaptureMove(sq, sq - 9, board.Pieces[sq-9]);
 			}
 			
-			if(SQOFFBOARD(sq - 11) == 0 && PieceCol[board.Pieces[sq-11]] == COLOURS.WHITE) {
+			if(SQOFFBOARD(sq - 11) == 0 && PieceCol[board.Pieces[sq-11]] == 0) {
 				AddBlackPawnCaptureMove(sq, sq - 11, board.Pieces[sq-11]);
 			}			
 			
-			if(board.enPas != Squares.NO_SQ) {
+			if(board.enPas != Squares.NoSq) {
 				if(sq - 9 == board.enPas) {
-					AddEnPassantMove( MOVE(sq, sq-9, Pieces.EMPTY, Pieces.EMPTY, MFLAGEP ) );
+					AddEnPassantMove( MOVE(sq, sq-9, Pieces.empty, Pieces.empty, MFLAGEP ) );
 				}
 				
 				if(sq - 11 == board.enPas) {
-					AddEnPassantMove( MOVE(sq, sq-11, Pieces.EMPTY, Pieces.EMPTY, MFLAGEP ) );
+					AddEnPassantMove( MOVE(sq, sq-11, Pieces.empty, Pieces.empty, MFLAGEP ) );
 				}
 			}
 		}
-		if(board.castlePerm & CASTLEBIT.BKCA) {	
-			if(board.Pieces[Squares.F8] == Pieces.EMPTY && board.Pieces[Squares.G8] == Pieces.EMPTY) {
-				if(SqAttacked(Squares.F8, COLOURS.WHITE) == 0 && SqAttacked(Squares.E8, COLOURS.WHITE) == 0) {
-					AddQuietMove( MOVE(Squares.E8, Squares.G8, Pieces.EMPTY, Pieces.EMPTY, MFLAGCA ));
+		if(board.castlePerm & 4) {	
+			if(board.Pieces[Squares.F8] == Pieces.empty && board.Pieces[Squares.G8] == Pieces.empty) {
+				if(SqAttacked(Squares.F8, 0) == 0 && SqAttacked(Squares.E8, 0) == 0) {
+					AddQuietMove( MOVE(Squares.E8, Squares.G8, Pieces.empty, Pieces.empty, MFLAGCA ));
 				}
 			}
 		}
 		
-		if(board.castlePerm & CASTLEBIT.BQCA) {
-			if(board.Pieces[Squares.D8] == Pieces.EMPTY && board.Pieces[Squares.C8] == Pieces.EMPTY && board.Pieces[Squares.B8] == Pieces.EMPTY) {
-				if(SqAttacked(Squares.D8, COLOURS.WHITE) == 0 && SqAttacked(Squares.E8, COLOURS.WHITE) == 0) {
-					AddQuietMove( MOVE(Squares.E8, Squares.C8, Pieces.EMPTY, Pieces.EMPTY, MFLAGCA ));
+		if(board.castlePerm & 8) {
+			if(board.Pieces[Squares.D8] == Pieces.empty && board.Pieces[Squares.C8] == Pieces.empty && board.Pieces[Squares.B8] == Pieces.empty) {
+				if(SqAttacked(Squares.D8, 0) == 0 && SqAttacked(Squares.E8, 0) == 0) {
+					AddQuietMove( MOVE(Squares.E8, Squares.C8, Pieces.empty, Pieces.empty, MFLAGCA ));
 				}
 			}
 		}	
@@ -229,12 +229,12 @@ function GenerateMoves() {
 					continue;
 				}
 				
-				if(board.Pieces[t_sq] != Pieces.EMPTY) {
+				if(board.Pieces[t_sq] != Pieces.empty) {
 					if(PieceCol[board.Pieces[t_sq]] != board.side) {
-						AddCaptureMove( MOVE(sq, t_sq, board.Pieces[t_sq], Pieces.EMPTY, 0 ));
+						AddCaptureMove( MOVE(sq, t_sq, board.Pieces[t_sq], Pieces.empty, 0 ));
 					}
 				} else {
-					AddQuietMove( MOVE(sq, t_sq, Pieces.EMPTY, Pieces.EMPTY, 0 ));
+					AddQuietMove( MOVE(sq, t_sq, Pieces.empty, Pieces.empty, 0 ));
 				}
 			}			
 		}	
@@ -254,13 +254,13 @@ function GenerateMoves() {
 				
 				while( SQOFFBOARD(t_sq) == 0 ) {	
 				
-					if(board.Pieces[t_sq] != Pieces.EMPTY) {
+					if(board.Pieces[t_sq] != Pieces.empty) {
 						if(PieceCol[board.Pieces[t_sq]] != board.side) {
-							AddCaptureMove( MOVE(sq, t_sq, board.Pieces[t_sq], Pieces.EMPTY, 0 ));
+							AddCaptureMove( MOVE(sq, t_sq, board.Pieces[t_sq], Pieces.empty, 0 ));
 						}
 						break;
 					}
-					AddQuietMove( MOVE(sq, t_sq, Pieces.EMPTY, Pieces.EMPTY, 0 ));
+					AddQuietMove( MOVE(sq, t_sq, Pieces.empty, Pieces.empty, 0 ));
 					t_sq += dir;
 				}
 			}			
@@ -280,27 +280,27 @@ function GenerateCaptures() {
 	var t_sq;
 	var dir;
 	
-	if(board.side == COLOURS.WHITE) {
+	if(board.side == 0) {
 		pceType = Pieces.wP;
 		
 		for(pceNum = 0; pceNum < board.pceNum[pceType]; ++pceNum) {
 			sq = board.pList[PCEINDEX(pceType, pceNum)];				
 			
-			if(SQOFFBOARD(sq + 9) == 0 && PieceCol[board.Pieces[sq+9]] == COLOURS.BLACK) {
+			if(SQOFFBOARD(sq + 9) == 0 && PieceCol[board.Pieces[sq+9]] == 1) {
 				AddWhitePawnCaptureMove(sq, sq + 9, board.Pieces[sq+9]);
 			}
 			
-			if(SQOFFBOARD(sq + 11) == 0 && PieceCol[board.Pieces[sq+11]] == COLOURS.BLACK) {
+			if(SQOFFBOARD(sq + 11) == 0 && PieceCol[board.Pieces[sq+11]] == 1) {
 				AddWhitePawnCaptureMove(sq, sq + 11, board.Pieces[sq+11]);
 			}			
 			
-			if(board.enPas != Squares.NO_SQ) {
+			if(board.enPas != Squares.NoSq) {
 				if(sq + 9 == board.enPas) {
-					AddEnPassantMove( MOVE(sq, sq+9, Pieces.EMPTY, Pieces.EMPTY, MFLAGEP ) );
+					AddEnPassantMove( MOVE(sq, sq+9, Pieces.empty, Pieces.empty, MFLAGEP ) );
 				}
 				
 				if(sq + 11 == board.enPas) {
-					AddEnPassantMove( MOVE(sq, sq+11, Pieces.EMPTY, Pieces.EMPTY, MFLAGEP ) );
+					AddEnPassantMove( MOVE(sq, sq+11, Pieces.empty, Pieces.empty, MFLAGEP ) );
 				}
 			}			
 			
@@ -312,21 +312,21 @@ function GenerateCaptures() {
 		for(pceNum = 0; pceNum < board.pceNum[pceType]; ++pceNum) {
 			sq = board.pList[PCEINDEX(pceType, pceNum)];			
 			
-			if(SQOFFBOARD(sq - 9) == 0 && PieceCol[board.Pieces[sq-9]] == COLOURS.WHITE) {
+			if(SQOFFBOARD(sq - 9) == 0 && PieceCol[board.Pieces[sq-9]] == 0) {
 				AddBlackPawnCaptureMove(sq, sq - 9, board.Pieces[sq-9]);
 			}
 			
-			if(SQOFFBOARD(sq - 11) == 0 && PieceCol[board.Pieces[sq-11]] == COLOURS.WHITE) {
+			if(SQOFFBOARD(sq - 11) == 0 && PieceCol[board.Pieces[sq-11]] == 0) {
 				AddBlackPawnCaptureMove(sq, sq - 11, board.Pieces[sq-11]);
 			}			
 			
-			if(board.enPas != Squares.NO_SQ) {
+			if(board.enPas != Squares.NoSq) {
 				if(sq - 9 == board.enPas) {
-					AddEnPassantMove( MOVE(sq, sq-9, Pieces.EMPTY, Pieces.EMPTY, MFLAGEP ) );
+					AddEnPassantMove( MOVE(sq, sq-9, Pieces.empty, Pieces.empty, MFLAGEP ) );
 				}
 				
 				if(sq - 11 == board.enPas) {
-					AddEnPassantMove( MOVE(sq, sq-11, Pieces.EMPTY, Pieces.EMPTY, MFLAGEP ) );
+					AddEnPassantMove( MOVE(sq, sq-11, Pieces.empty, Pieces.empty, MFLAGEP ) );
 				}
 			}
 		}			
@@ -347,9 +347,9 @@ function GenerateCaptures() {
 					continue;
 				}
 				
-				if(board.Pieces[t_sq] != Pieces.EMPTY) {
+				if(board.Pieces[t_sq] != Pieces.empty) {
 					if(PieceCol[board.Pieces[t_sq]] != board.side) {
-						AddCaptureMove( MOVE(sq, t_sq, board.Pieces[t_sq], Pieces.EMPTY, 0 ));
+						AddCaptureMove( MOVE(sq, t_sq, board.Pieces[t_sq], Pieces.empty, 0 ));
 					}
 				}
 			}			
@@ -370,9 +370,9 @@ function GenerateCaptures() {
 				
 				while( SQOFFBOARD(t_sq) == 0 ) {	
 				
-					if(board.Pieces[t_sq] != Pieces.EMPTY) {
+					if(board.Pieces[t_sq] != Pieces.empty) {
 						if(PieceCol[board.Pieces[t_sq]] != board.side) {
-							AddCaptureMove( MOVE(sq, t_sq, board.Pieces[t_sq], Pieces.EMPTY, 0 ));
+							AddCaptureMove( MOVE(sq, t_sq, board.Pieces[t_sq], Pieces.empty, 0 ));
 						}
 						break;
 					}

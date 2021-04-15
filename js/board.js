@@ -5,7 +5,7 @@ function PCEINDEX(pce, pceNum) {
 var board = {};
 
 board.Pieces = new Array(BrdSqNum);
-board.side = COLOURS.WHITE;
+board.side = 0;
 board.fiftyMove = 0;
 board.hisPly = 0;
 board.history = [];
@@ -56,13 +56,13 @@ function CheckBoard() {
 			}	
 	}
 	
-	if(t_material[COLOURS.WHITE] != board.material[COLOURS.WHITE] ||
-			 t_material[COLOURS.BLACK] != board.material[COLOURS.BLACK]) {
+	if(t_material[0] != board.material[0] ||
+			 t_material[1] != board.material[1]) {
 				console.log('Error t_material');
 				return 0;
 	}	
 	
-	if(board.side!=COLOURS.WHITE && board.side!=COLOURS.BLACK) {
+	if(board.side!=0 && board.side!=1) {
 				console.log('Error board.side');
 				return 0;
 	}
@@ -101,10 +101,10 @@ function PrintBoard() {
 	console.log("enPas:" + board.enPas);
 	line = "";	
 	
-	if(board.castlePerm & CASTLEBIT.WKCA) line += 'K';
-	if(board.castlePerm & CASTLEBIT.WQCA) line += 'Q';
-	if(board.castlePerm & CASTLEBIT.BKCA) line += 'k';
-	if(board.castlePerm & CASTLEBIT.BQCA) line += 'q';
+	if(board.castlePerm & 1) line += 'K';
+	if(board.castlePerm & 2) line += 'Q';
+	if(board.castlePerm & 4) line += 'k';
+	if(board.castlePerm & 8) line += 'q';
 	console.log("castle:" + line);
 	console.log("key:" + board.posKey.toString(16));
 }
@@ -113,20 +113,20 @@ function GeneratePosKey() {
 
 	var sq = 0;
 	var finalKey = 0;
-	var piece = Pieces.EMPTY;
+	var piece = Pieces.empty;
 
 	for(sq = 0; sq < BrdSqNum; ++sq) {
 		piece = board.Pieces[sq];
-		if(piece != Pieces.EMPTY && piece != Squares.OFFBOARD) {			
+		if(piece != Pieces.empty && piece != Squares.offboard) {			
 			finalKey ^= PieceKeys[(piece * 120) + sq];
 		}		
 	}
 
-	if(board.side == COLOURS.WHITE) {
+	if(board.side == 0) {
 		finalKey ^= SideKey;
 	}
 	
-	if(board.enPas != Squares.NO_SQ) {		
+	if(board.enPas != Squares.NoSq) {		
 		finalKey ^= PieceKeys[board.enPas];
 	}
 	
@@ -153,7 +153,7 @@ function UpdateListsMaterial() {
 	var piece,sq,index,colour;
 	
 	for(index = 0; index < 14 * 120; ++index) {
-		board.pList[index] = Pieces.EMPTY;
+		board.pList[index] = Pieces.empty;
 	}
 	
 	for(index = 0; index < 2; ++index) {		
@@ -167,7 +167,7 @@ function UpdateListsMaterial() {
 	for(index = 0; index < 64; ++index) {
 		sq = SQ120(index);
 		piece = board.Pieces[sq];
-		if(piece != Pieces.EMPTY) {
+		if(piece != Pieces.empty) {
 			
 			colour = PieceCol[piece];		
 			
@@ -185,15 +185,15 @@ function ResetBoard() {
 	var index = 0;
 	
 	for(index = 0; index < BrdSqNum; ++index) {
-		board.Pieces[index] = Squares.OFFBOARD;
+		board.Pieces[index] = Squares.offboard;
 	}
 	
 	for(index = 0; index < 64; ++index) {
-		board.Pieces[SQ120(index)] = Pieces.EMPTY;
+		board.Pieces[SQ120(index)] = Pieces.empty;
 	}
 	
-	board.side = COLOURS.BOTH;
-	board.enPas = Squares.NO_SQ;
+	board.side = 2;
+	board.enPas = Squares.NoSq;
 	board.fiftyMove = 0;	
 	board.ply = 0;
 	board.hisPly = 0;	
@@ -241,7 +241,7 @@ function ParseFen(fen) {
             case '6':
             case '7':
             case '8':
-                piece = Pieces.EMPTY;
+                piece = Pieces.empty;
                 count = fen[fenCnt].charCodeAt() - '0'.charCodeAt();
                 break;
             
@@ -266,7 +266,7 @@ function ParseFen(fen) {
 	} // while loop end
 	
 	//rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
-	board.side = (fen[fenCnt] == 'w') ? COLOURS.WHITE : COLOURS.BLACK;
+	board.side = (fen[fenCnt] == 'w') ? 0 : 1;
 	fenCnt += 2;
 	
 	for (i = 0; i < 4; i++) {
@@ -274,10 +274,10 @@ function ParseFen(fen) {
             break;
         }		
 		switch(fen[fenCnt]) {
-			case 'K': board.castlePerm |= CASTLEBIT.WKCA; break;
-			case 'Q': board.castlePerm |= CASTLEBIT.WQCA; break;
-			case 'k': board.castlePerm |= CASTLEBIT.BKCA; break;
-			case 'q': board.castlePerm |= CASTLEBIT.BQCA; break;
+			case 'K': board.castlePerm |= 1; break;
+			case 'Q': board.castlePerm |= 2; break;
+			case 'k': board.castlePerm |= 4; break;
+			case 'q': board.castlePerm |= 8; break;
 			default:	     break;
         }
 		fenCnt++;
@@ -321,7 +321,7 @@ function SqAttacked(sq, side) {
 	var t_sq;
 	var index;
 	
-	if(side == COLOURS.WHITE) {
+	if(side == 0) {
 		if(board.Pieces[sq - 11] == Pieces.wP || board.Pieces[sq - 9] == Pieces.wP) {
 			return 1;
 		}
@@ -333,7 +333,7 @@ function SqAttacked(sq, side) {
 	
 	for(index = 0; index < 8; index++) {
 		pce = board.Pieces[sq + KnDir[index]];
-		if(pce != Squares.OFFBOARD && PieceCol[pce] == side && PieceKnight[pce] == 1) {
+		if(pce != Squares.offboard && PieceCol[pce] == side && PieceKnight[pce] == 1) {
 			return 1;
 		}
 	}
@@ -342,8 +342,8 @@ function SqAttacked(sq, side) {
 		dir = RkDir[index];
 		t_sq = sq + dir;
 		pce = board.Pieces[t_sq];
-		while(pce != Squares.OFFBOARD) {
-			if(pce != Pieces.EMPTY) {
+		while(pce != Squares.offboard) {
+			if(pce != Pieces.empty) {
 				if(PieceRookQueen[pce] == 1 && PieceCol[pce] == side) {
 					return 1;
 				}
@@ -358,8 +358,8 @@ function SqAttacked(sq, side) {
 		dir = BiDir[index];
 		t_sq = sq + dir;
 		pce = board.Pieces[t_sq];
-		while(pce != Squares.OFFBOARD) {
-			if(pce != Pieces.EMPTY) {
+		while(pce != Squares.offboard) {
+			if(pce != Pieces.empty) {
 				if(PieceBishopQueen[pce] == 1 && PieceCol[pce] == side) {
 					return 1;
 				}
@@ -372,7 +372,7 @@ function SqAttacked(sq, side) {
 	
 	for(index = 0; index < 8; index++) {
 		pce = board.Pieces[sq + KiDir[index]];
-		if(pce != Squares.OFFBOARD && PieceCol[pce] == side && PieceKing[pce] == 1) {
+		if(pce != Squares.offboard && PieceCol[pce] == side && PieceKing[pce] == 1) {
 			return 1;
 		}
 	}

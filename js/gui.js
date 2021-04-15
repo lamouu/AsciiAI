@@ -39,7 +39,7 @@ function SetSqSelected(sq) {
 
 function MakeUserMove() {
 
-	if(UserMove.from != Squares.NO_SQ && UserMove.to != Squares.NO_SQ) {
+	if(UserMove.from != Squares.NoSq && UserMove.to != Squares.NoSq) {
 	
 		if (DEBUG) console.log("User Move:" + PrSq(UserMove.from) + PrSq(UserMove.to));	
 		
@@ -56,8 +56,8 @@ function MakeUserMove() {
 		DeSelectSq(UserMove.from);
 		DeSelectSq(UserMove.to);
 		
-		UserMove.from = Squares.NO_SQ;
-		UserMove.to = Squares.NO_SQ;
+		UserMove.from = Squares.NoSq;
+		UserMove.to = Squares.NoSq;
 
 	}
 
@@ -135,7 +135,7 @@ function CheckResult() {
 	var InCheck = SqAttacked(board.pList[PCEINDEX(Kings[board.side],0)], board.side^1);
 	
 	if(InCheck == 1) {
-		if(board.side == COLOURS.WHITE) {
+		if(board.side == 0) {
 	      $("#GameStatus").text("GAME OVER {black mates}");
 	      return 1;
         } else {
