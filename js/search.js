@@ -301,17 +301,22 @@ function SearchPosition() {
 
 function UpdateDOMStats(dom_score, dom_depth) {
 
-	var scoreText = "Score: " + (dom_score / 100).toFixed(2);
+	var scoreText = (dom_score / 100).toFixed(2);
 	if(Math.abs(dom_score) > Mate - MaxDepth) {
-		scoreText = "Score: Mate In " + (Mate - (Math.abs(dom_score))-1) + " moves";
+		scoreText = "m" + (Mate - (Math.abs(dom_score))-1);
+	}
+	if(scoreText > 0) {
+		scoreText = "+" + scoreText
 	}
 	
-	$("#OrderingOut").text("Ordering: " + ((controller.fhf/controller.fh)*100).toFixed(2) + "%");
-	$("#DepthOut").text("Depth: " + dom_depth);
-	$("#ScoreOut").text(scoreText);
-	$("#NodesOut").text("Nodes: " + controller.nodes);
-	$("#TimeOut").text("Time: " + (($.now()-controller.start)/1000).toFixed(1) + "s");
-	$("#BestOut").text("BestMove: " + PrMove(controller.best));
+	$("#InfoBar").html(`<table><tr><div id="NewGameButton">-------<br>New<br>Game<br>-------<br><br></div></tr><tr>${scoreText}<br></tr><tr>_______<br>|      |<br>|      |<br>|      |<br>|      |<br>|      |<br>|      |<br>|      |<br>|      |<br>|      |<br>|      |<br>|      |<br>|      |<br>|      |<br>|      |<br>|      |<br>|      |<br>|      |<br>|      |<br>|      |<br>|      |<br>|%#%#%#|<br>|#%#%#%|<br>|%#%#%#|<br>|#%#%#%|<br>|%#%#%#|<br>|#%#%#%|<br>|%#%#%#|<br>|#%#%#%|<br>|%#%#%#|<br>|#%#%#%|<br>|%#%#%#|<br>|#%#%#%|<br>|%#%#%#|<br>|#%#%#%|<br>|%#%#%#|<br>|#%#%#%|<br>|%#%#%#|<br>|#%#%#%|<br>|%_%#_#|<br><br></tr><tr>Depth<br></tr><tr>${dom_depth}<br></tr><tr><br>Nodes<br></tr><tr>${controller.nodes}<br></tr><tr><br>Order<br></tr><tr>${((controller.fhf/controller.fh)*100).toFixed(2) + "%"}</tr></table>`);
+
+	//$("#OrderingOut").text(((controller.fhf/controller.fh)*100).toFixed(2) + "%");
+	//$("#DepthOut").text(dom_depth);
+	//$("#ScoreOut").text(scoreText);
+	//$("#NodesOut").text(controller.nodes);
+	//$("#TimeOut").text((($.now()-controller.start)/1000).toFixed(1) + "s");
+	//$("#BestOut").text(PrMove(controller.best));
 }
 
 

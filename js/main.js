@@ -182,6 +182,7 @@ function init() {
 	InitBoardSquares();
 	InitAsciiSquares();
 	UpdateGui();
+	$("#InfoBar").html(`<table><tr><div id="NewGameButton">-------<br>New<br>Game<br>-------<br><br></div></tr><tr>0.00<br></tr><tr>_______<br>|      |<br>|      |<br>|      |<br>|      |<br>|      |<br>|      |<br>|      |<br>|      |<br>|      |<br>|      |<br>|      |<br>|      |<br>|      |<br>|      |<br>|      |<br>|      |<br>|      |<br>|      |<br>|      |<br>|      |<br>|%#%#%#|<br>|#%#%#%|<br>|%#%#%#|<br>|#%#%#%|<br>|%#%#%#|<br>|#%#%#%|<br>|%#%#%#|<br>|#%#%#%|<br>|%#%#%#|<br>|#%#%#%|<br>|%#%#%#|<br>|#%#%#%|<br>|%#%#%#|<br>|#%#%#%|<br>|%#%#%#|<br>|#%#%#%|<br>|%#%#%#|<br>|#%#%#%|<br>|%_%#_#|<br><br></tr><tr>Depth<br></tr><tr>0<br></tr><tr><br>Nodes<br></tr><tr>0<br></tr><tr><br>Order<br></tr><tr>0%</tr></table>`);
 }
 
 

@@ -1,3 +1,8 @@
+$("#SetFen").click(function () {
+	var fenStr = $("#fenIn").val();	
+	NewGame(fenStr);
+});
+
 $('#TakeButton').click( function () {
 	if(board.hisPly > 0) {
 		TakeMove();
@@ -214,7 +219,7 @@ function UpdateGui() {
 		for (y = 0; y < 8; y++) {
 		boardId = String.fromCharCode(97 + x) + String(y + 1);
 		if ((y + 7 * x) % 2 != 0) {
-			boardTile = ':::::::::::::::::<br>:::::::::::::::::<br>:::::::::::::::::<br>:::::::::::::::::<br>:::::::::::::::::<br>:::::::::::::::::<br>:::::::::::::::::<br>';
+			boardTile = ': : : : : : : : :<br> : : : : : : : : <br>: : : : : : : : :<br> : : : : : : : : <br>: : : : : : : : :<br> : : : : : : : : <br>: : : : : : : : :<br>';
 		} else {
 			boardTile = '                 <br>                 <br>                 <br>                 <br>                 <br>                 <br>                 <br>';
 		}
@@ -298,4 +303,8 @@ function UpdateGui() {
 		document.getElementById(boardId).innerHTML = boardTile;
 		}
 	}
+	
+	$('#NewGameButton').click( function () {
+		NewGame(StartFEN);
+	});
 }
