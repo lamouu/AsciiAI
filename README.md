@@ -10,8 +10,8 @@
 
 Future improvements
 ------
-* Clean and comment
-* Visible move options
-* Option to play on regular board
-* Browser/scaling compatibility
-* Opening & endgame book
+1. Menu
+2. Switching sides
+3. Difficulty settings
+
+* Square highlighting
