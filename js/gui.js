@@ -305,6 +305,15 @@ function UpdateGui() {
 	}
 	
 	$('#NewGameButton').click( function () {
+		$("#board").hide();
+		$("#menu").show();
+		$("#play").show();
 		NewGame(StartFEN);
+	});
+
+	$('#play').click( function () {
+		$("#menu").hide();
+		$("#play").hide();
+		$("#board").show();
 	});
 }
