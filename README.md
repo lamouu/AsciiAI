@@ -10,8 +10,6 @@
 
 Future improvements
 ------
-1. Menu
+1. Square highlighting
 2. Switching sides
 3. Difficulty settings
-
-* Square highlighting
