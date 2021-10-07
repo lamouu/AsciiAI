@@ -7,7 +7,7 @@
                     .8'     `888.  o.  )88b 888   .o8  888   888   .8'     `888.   888
                    o88o     o8888o 8""888P' `Y8bod8P' o888o o888o o88o     o8888o o888o
 ```
-**Play at [lamouu.github.io/asciiai/](lamouu.github.io/asciiai/)**
+**Play at [https://lamouu.github.io/AsciiAI/](https://lamouu.github.io/AsciiAI/)**
 
 Improvements
 ------
