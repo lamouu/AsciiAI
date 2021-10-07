@@ -8,7 +8,7 @@
                    o88o     o8888o 8""888P' `Y8bod8P' o888o o888o o88o     o8888o o888o
 ```
 
-Future improvements
+TODO
 ------
 1. Square highlighting
 2. Switching sides
